@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]		
 
 //Changed when no more compatible with the previous version
-[assembly: AssemblyVersion("4.40.*")]
+//[assembly: AssemblyVersion("4.40.*")]
 
 [assembly: CLSCompliant(true)]
 
