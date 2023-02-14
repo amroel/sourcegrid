@@ -22,8 +22,8 @@ namespace DevAge.Runtime.Serialization
 		public static object BinDeserialize(Stream p_Stream)
 		{
 			BinaryFormatter f = new BinaryFormatter();
-			object tmp;
-			tmp = f.Deserialize(p_Stream);
+			object tmp = null;
+			//tmp = f.Deserialize(p_Stream);
 			return tmp;
 		}
 
@@ -35,7 +35,7 @@ namespace DevAge.Runtime.Serialization
 		public static void BinSerialize(Stream p_Stream, object p_Object)
 		{
 			BinaryFormatter f = new BinaryFormatter();
-			f.Serialize(p_Stream,p_Object);
+			//f.Serialize(p_Stream,p_Object);
 		}
 
         /// <summary>
