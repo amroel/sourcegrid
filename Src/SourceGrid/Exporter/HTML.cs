@@ -239,7 +239,7 @@ namespace SourceGrid.Exporter
 			else
 			{
 				#region TD style
-				Range rangeCell = context.Grid.PositionToCellRange(context.Position);
+				SgRange rangeCell = context.Grid.PositionToCellRange(context.Position);
 				if (rangeCell.Start != context.Position)
 					return;
 

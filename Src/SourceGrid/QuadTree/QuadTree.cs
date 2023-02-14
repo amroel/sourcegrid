@@ -1,8 +1,5 @@
-﻿using SourceGrid;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Collections.Generic;
+using SourceGrid;
 
 namespace QuadTreeLib
 {
@@ -25,11 +22,11 @@ namespace QuadTreeLib
 		/// <summary>
 		/// The bounds of this QuadTree
 		/// </summary>
-		Range m_rectangle;
+		SgRange m_rectangle;
 
 		public IQuadTreeNodeDivider QuadTreeNodeDivider {get;set;}
 		
-		public Range Bounds {
+		public SgRange Bounds {
 			get { return m_rectangle; }
 		}
 		
@@ -43,7 +40,7 @@ namespace QuadTreeLib
 		/// <summary>
 		/// Returns all the content 
 		/// </summary>
-		public List<Range> Contents {
+		public List<SgRange> Contents {
 			get 
 			{ 
 				return this.Query(this.Bounds);
@@ -68,7 +65,7 @@ namespace QuadTreeLib
 
 		
 		public QuadTree(int rows, int columns)
-			:this(new Range(1, 1, rows, columns))
+			:this(new SgRange(1, 1, rows, columns))
 		{
 		}
 		
@@ -76,7 +73,7 @@ namespace QuadTreeLib
 		/// 
 		/// </summary>
 		/// <param name="rectangle"></param>
-		public QuadTree(Range rectangle)
+		public QuadTree(SgRange rectangle)
 		{
 			m_rectangle = rectangle;
 			m_root = new QuadTreeNode(m_rectangle, 0, this);
@@ -93,13 +90,13 @@ namespace QuadTreeLib
 		/// Insert the feature into the QuadTree
 		/// </summary>
 		/// <param name="item"></param>
-		public QuadTree Insert(Range item)
+		public QuadTree Insert(SgRange item)
 		{
 			m_root.Insert(item);
 			return this;
 		}
 		
-		public QuadTree Remove(Range range)
+		public QuadTree Remove(SgRange range)
 		{
 			m_root.Remove(range);
 			return this;
@@ -120,7 +117,7 @@ namespace QuadTreeLib
 		/// <summary>
 		/// Insert the feature into the QuadTree
 		/// </summary>
-		public QuadTree Insert(IEnumerable<Range> items)
+		public QuadTree Insert(IEnumerable<SgRange> items)
 		{
 			foreach (var range in items)
 			{
@@ -134,12 +131,12 @@ namespace QuadTreeLib
 		/// </summary>
 		/// <param name="area"></param>
 		/// <returns></returns>
-		public List<Range> Query(Range area)
+		public List<SgRange> Query(SgRange area)
 		{
 			return m_root.Query(area);
 		}
 		
-		public List<Range> Query(Position area)
+		public List<SgRange> Query(Position area)
 		{
 			return m_root.Query(area);
 		}
@@ -149,12 +146,12 @@ namespace QuadTreeLib
 		/// </summary>
 		/// <param name="area"></param>
 		/// <returns></returns>
-		public Range? QueryFirst(Position area)
+		public SgRange? QueryFirst(Position area)
 		{
 			return m_root.QueryFirst(area);
 		}
 		
-		public Range? QueryFirst(Range area)
+		public SgRange? QueryFirst(SgRange area)
 		{
 			return m_root.QueryFirst(area);
 		}

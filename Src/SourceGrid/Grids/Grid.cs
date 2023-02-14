@@ -80,7 +80,7 @@ namespace SourceGrid
             this.Name = "Grid";
             spannedCellReferences = new SpannedCellRangesController(
                 this,
-                new QuadTreeRangesList(Range.From(new Position(0, 0), 4, 4)));
+                new QuadTreeRangesList(SgRange.From(new Position(0, 0), 4, 4)));
 
             this.ResumeLayout(false);
         }
@@ -370,7 +370,7 @@ namespace SourceGrid
 
         private void EnsureNoSpannedCellsExist(int row, int col, Cells.ICell p_cell)
         {
-            var spanRange = new Range(row, col, row + p_cell.RowSpan - 1, col + p_cell.ColumnSpan - 1);
+            var spanRange = new SgRange(row, col, row + p_cell.RowSpan - 1, col + p_cell.ColumnSpan - 1);
             var ranges = spannedCellReferences.SpannedRangesCollection.GetRanges(
                 spanRange);
             if (ranges.Count == 0)
@@ -610,7 +610,7 @@ namespace SourceGrid
         /// This method converts a Position to the real range of the cell. This is usefull when RowSpan or ColumnSpan is greater than 1.
         /// </summary>
         /// <returns></returns>
-        public override Range RangeToCellRange(Range range)
+        public override SgRange RangeToCellRange(SgRange range)
         {
             int x = range.Start.Column;
             int x1 = range.End.Column;
@@ -621,9 +621,9 @@ namespace SourceGrid
                 for (int y2 = range.Start.Row; y2 <= range.End.Row; y2++)
                 {
                     var p = new Position(y2, x2);
-                    Range range2 = PositionToCellRange(p);
+                    SgRange range2 = PositionToCellRange(p);
                     if (range2.IsEmpty())
-                        range2 = new Range(p, p);
+                        range2 = new SgRange(p, p);
                     if (range2.Start.Column < x)
                         x = range2.Start.Column;
                     if (range2.End.Column > x1)
@@ -635,7 +635,7 @@ namespace SourceGrid
                         y1 = range2.End.Row;
                 }
             }
-            return new Range(y, x, y1, x1);
+            return new SgRange(y, x, y1, x1);
         }
 
         /// <summary>
@@ -644,14 +644,14 @@ namespace SourceGrid
         /// </summary>
         /// <param name="pPosition"></param>
         /// <returns></returns>
-        public override Range PositionToCellRange(Position pPosition)
+        public override SgRange PositionToCellRange(Position pPosition)
         {
             if (pPosition.IsEmpty())
-                return Range.Empty;
+                return SgRange.Empty;
 
             Cells.ICell l_Cell = this[pPosition.Row, pPosition.Column];
             if (l_Cell == null)
-                return Range.Empty;
+                return SgRange.Empty;
             else
                 return l_Cell.Range;
         }
@@ -708,7 +708,7 @@ namespace SourceGrid
 
         protected override void PaintCell(DevAge.Drawing.GraphicsCache graphics, CellContext cellContext, RectangleF drawRectangle)
         {
-            Range cellRange = PositionToCellRange(cellContext.Position);
+            SgRange cellRange = PositionToCellRange(cellContext.Position);
             if (cellRange.ColumnsCount == 1 && cellRange.RowsCount == 1)
             {
                 base.PaintCell(graphics, cellContext, drawRectangle);

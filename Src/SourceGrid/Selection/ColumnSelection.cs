@@ -40,13 +40,13 @@ namespace SourceGrid.Selection
             {
                 mList.Add(column);
 
-                OnSelectionChanged(new RangeRegionChangedEventArgs(Grid.Columns.GetRange(column) , Range.Empty));
+                OnSelectionChanged(new RangeRegionChangedEventArgs(Grid.Columns.GetRange(column) , SgRange.Empty));
             }
             else if (!select && mList.Contains(column))
             {
                 mList.Remove(column);
 
-                OnSelectionChanged(new RangeRegionChangedEventArgs(Range.Empty, Grid.Columns.GetRange(column)));
+                OnSelectionChanged(new RangeRegionChangedEventArgs(SgRange.Empty, Grid.Columns.GetRange(column)));
             } 
         }
 
@@ -70,7 +70,7 @@ namespace SourceGrid.Selection
             SelectColumn(position.Column, select);
         }
 
-        public override bool IsSelectedRange(Range range)
+        public override bool IsSelectedRange(SgRange range)
         {
             for (int c = range.Start.Column; c <= range.End.Column; c++)
             {
@@ -81,7 +81,7 @@ namespace SourceGrid.Selection
             return true;
         }
 
-        public override void SelectRange(Range range, bool select)
+        public override void SelectRange(SgRange range, bool select)
         {
             for (int c = range.Start.Column; c <= range.End.Column; c++)
             {
@@ -111,14 +111,14 @@ namespace SourceGrid.Selection
             {
                 foreach (int col in mList)
                 {
-                    region.Add(ValidateRange(new Range(Grid.FixedRows, col, Grid.Rows.Count - 1, col)));
+                    region.Add(ValidateRange(new SgRange(Grid.FixedRows, col, Grid.Rows.Count - 1, col)));
                 }
             }
 
             return region;
         }
 
-        public override bool IntersectsWith(Range rng)
+        public override bool IntersectsWith(SgRange rng)
         {
             for (int c = rng.Start.Column; c <= rng.End.Column; c++)
             {

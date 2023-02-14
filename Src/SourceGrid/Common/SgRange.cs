@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 
 namespace SourceGrid
 {
@@ -7,26 +6,26 @@ namespace SourceGrid
 	/// Represents a range of cells. Once created cannot be modified. This Range has always Start in the Top-Left, and End in the Bottom-Right (see Normalize method).
 	/// </summary>
 	[Serializable]
-	public struct Range
+	public struct SgRange
 	{
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="p_Start"></param>
 		/// <param name="p_End"></param>
-		public Range(Position p_Start, Position p_End):this(p_Start, p_End, true)
+		public SgRange(Position p_Start, Position p_End):this(p_Start, p_End, true)
 		{
 		}
 		
-		public static Range FromPosition(Position startPosition)
+		public static SgRange FromPosition(Position startPosition)
 		{
-			return new Range(startPosition);
+			return new SgRange(startPosition);
 		}
 
 		
-		public static Range From(Position startPosition, int rowCount, int colCount)
+		public static SgRange From(Position startPosition, int rowCount, int colCount)
 		{
-			var range = new Range(startPosition);
+			var range = new SgRange(startPosition);
 			range.RowsCount = rowCount;
 			range.ColumnsCount = colCount;
 			return range;
@@ -39,7 +38,7 @@ namespace SourceGrid
 		/// <param name="p_StartCol"></param>
 		/// <param name="p_EndRow"></param>
 		/// <param name="p_EndCol"></param>
-		public Range(int p_StartRow, int p_StartCol, int p_EndRow, int p_EndCol)
+		public SgRange(int p_StartRow, int p_StartCol, int p_EndRow, int p_EndCol)
 		{
 			m_Start = new Position(p_StartRow, p_StartCol);
 			m_End = new Position(p_EndRow, p_EndCol);
@@ -47,7 +46,7 @@ namespace SourceGrid
 			Normalize();
 		}
 
-		private Range(Position p_Start, Position p_End, bool p_bCheck)
+		private SgRange(Position p_Start, Position p_End, bool p_bCheck)
 		{
 			m_Start = p_Start;
 			m_End = p_End;
@@ -56,9 +55,9 @@ namespace SourceGrid
 				Normalize();
 		}
 
-		static Range()
+		static SgRange()
 		{
-			Empty = new Range(Position.Empty, Position.Empty, false);
+			Empty = new SgRange(Position.Empty, Position.Empty, false);
 		}
 
 		private Position m_Start, m_End;
@@ -127,14 +126,14 @@ namespace SourceGrid
 		/// Construct a Range of a single cell
 		/// </summary>
 		/// <param name="p_SinglePosition"></param>
-		public Range(Position p_SinglePosition):this(p_SinglePosition, p_SinglePosition, false)
+		public SgRange(Position p_SinglePosition):this(p_SinglePosition, p_SinglePosition, false)
 		{
 		}
 
 		/// <summary>
 		/// Represents an empty range
 		/// </summary>
-		public readonly static Range Empty;
+		public readonly static SgRange Empty;
 
 		/// <summary>
 		/// Check and fix the range to always have Start smaller than End
@@ -205,7 +204,7 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Range"></param>
 		/// <returns></returns>
-		public bool Contains(Range p_Range)
+		public bool Contains(SgRange p_Range)
 		{
 			return (Contains(p_Range.Start) &&
 					Contains(p_Range.End));
@@ -226,7 +225,7 @@ namespace SourceGrid
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
 		/// <returns></returns>
-		public static bool operator == (Range Left, Range Right)
+		public static bool operator == (SgRange Left, SgRange Right)
 		{
 			return Left.Equals(Right);
 		}
@@ -237,7 +236,7 @@ namespace SourceGrid
 		/// <param name="Left"></param>
 		/// <param name="Right"></param>
 		/// <returns></returns>
-		public static bool operator != (Range Left, Range Right)
+		public static bool operator != (SgRange Left, SgRange Right)
 		{
 			return !Left.Equals(Right);
 		}
@@ -256,7 +255,7 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Range"></param>
 		/// <returns></returns>
-		public bool Equals(Range p_Range)
+		public bool Equals(SgRange p_Range)
 		{
 			return (Start.Equals(p_Range.Start) && End.Equals(p_Range.End));
 		}
@@ -268,7 +267,7 @@ namespace SourceGrid
 		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
-			return Equals((Range)obj);
+			return Equals((SgRange)obj);
 		}
 
 		/// <summary>
@@ -301,7 +300,7 @@ namespace SourceGrid
 		/// <param name="p_Range1"></param>
 		/// <param name="p_Range2"></param>
 		/// <returns></returns>
-		public static RangeRegion Union(Range p_Range1, Range p_Range2)
+		public static RangeRegion Union(SgRange p_Range1, SgRange p_Range2)
 		{
 			RangeRegion range = new RangeRegion();
 			range.Add(p_Range1);
@@ -315,14 +314,14 @@ namespace SourceGrid
 		/// <param name="p_Range1"></param>
 		/// <param name="p_Range2"></param>
 		/// <returns></returns>
-		public static Range GetBounds(Range p_Range1, Range p_Range2)
+		public static SgRange GetBounds(SgRange p_Range1, SgRange p_Range2)
 		{
 			if (p_Range1.IsEmpty())
 				return p_Range2;
 			else if (p_Range2.IsEmpty())
 				return p_Range1;
 			else
-				return new Range(Position.Min(p_Range1.Start, p_Range2.Start),
+				return new SgRange(Position.Min(p_Range1.Start, p_Range2.Start),
 					Position.Max(p_Range1.End, p_Range2.End), false);
 		}
 
@@ -332,19 +331,19 @@ namespace SourceGrid
 		/// <param name="p_Range1"></param>
 		/// <param name="p_Range2"></param>
 		/// <returns></returns>
-		public static Range Intersect(Range p_Range1, Range p_Range2)
+		public static SgRange Intersect(SgRange p_Range1, SgRange p_Range2)
 		{
 			if (p_Range1.IsEmpty() || p_Range2.IsEmpty())
-				return Range.Empty;
+				return SgRange.Empty;
 
 			Position startNew = Position.Max(p_Range1.Start, p_Range2.Start);
 			Position endNew = Position.Min(p_Range1.End, p_Range2.End);
 
 			if (startNew.Column > endNew.Column ||
 				startNew.Row > endNew.Row)
-				return Range.Empty;
+				return SgRange.Empty;
 			else
-				return new Range(startNew, endNew, false);
+				return new SgRange(startNew, endNew, false);
 		}
 
 		/// <summary>
@@ -352,7 +351,7 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Range"></param>
 		/// <returns></returns>
-		public Range Intersect(Range p_Range)
+		public SgRange Intersect(SgRange p_Range)
 		{
 			return Intersect(this, p_Range);
 		}
@@ -364,7 +363,7 @@ namespace SourceGrid
 		/// <param name="p_Range1"></param>
 		/// <param name="p_Range2"></param>
 		/// <returns></returns>
-		public static bool IntersectsWith(Range p_Range1, Range p_Range2)
+		public static bool IntersectsWith(SgRange p_Range1, SgRange p_Range2)
 		{
 			return Intersect(p_Range1, p_Range2).IsEmpty() == false;
 		}
@@ -375,7 +374,7 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Range"></param>
 		/// <returns></returns>
-		public bool IntersectsWith(Range p_Range)
+		public bool IntersectsWith(SgRange p_Range)
 		{
 			return IntersectsWith(this, p_Range);
 		}
@@ -385,11 +384,11 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="range"></param>
 		/// <returns></returns>
-		public RangeRegion Exclude(Range range)
+		public RangeRegion Exclude(SgRange range)
 		{
 			RangeRegion excluded;
 
-			Range intersection = Intersect(range);
+			SgRange intersection = Intersect(range);
 			if (intersection.IsEmpty())
 			{
 				excluded = new RangeRegion(this);
@@ -401,42 +400,42 @@ namespace SourceGrid
 				//Top Left
 				if (this.Start.Row < intersection.Start.Row && 
 					this.Start.Column < intersection.Start.Column)
-					excluded.Add( new Range(this.Start.Row, this.Start.Column, intersection.Start.Row - 1, intersection.Start.Column - 1) );
+					excluded.Add( new SgRange(this.Start.Row, this.Start.Column, intersection.Start.Row - 1, intersection.Start.Column - 1) );
 
 				//Top
 				if (this.Start.Row < intersection.Start.Row)
-					excluded.Add( new Range(this.Start.Row, intersection.Start.Column, intersection.Start.Row - 1, intersection.End.Column) );
+					excluded.Add( new SgRange(this.Start.Row, intersection.Start.Column, intersection.Start.Row - 1, intersection.End.Column) );
 
 				//Top Right
 				if (this.Start.Row < intersection.Start.Row && 
 					this.End.Column > intersection.End.Column)
-					excluded.Add( new Range(this.Start.Row, intersection.End.Column + 1, intersection.Start.Row -1, this.End.Column) );
+					excluded.Add( new SgRange(this.Start.Row, intersection.End.Column + 1, intersection.Start.Row -1, this.End.Column) );
 
 				//----------
 
 				//Left
 				if (this.Start.Column < intersection.Start.Column)
-					excluded.Add( new Range(intersection.Start.Row, this.Start.Column, intersection.End.Row, intersection.Start.Column -1) );
+					excluded.Add( new SgRange(intersection.Start.Row, this.Start.Column, intersection.End.Row, intersection.Start.Column -1) );
 
 				//Right
 				if (this.End.Column > intersection.End.Column)
-					excluded.Add( new Range(intersection.Start.Row, intersection.End.Column + 1, intersection.End.Row, this.End.Column) );
+					excluded.Add( new SgRange(intersection.Start.Row, intersection.End.Column + 1, intersection.End.Row, this.End.Column) );
 
 				//--------
 
 				//Bottom Left
 				if (this.End.Row > intersection.End.Row &&
 					this.Start.Column < intersection.Start.Column)
-					excluded.Add( new Range(intersection.End.Row + 1, this.Start.Column, this.End.Row, intersection.Start.Column - 1) );
+					excluded.Add( new SgRange(intersection.End.Row + 1, this.Start.Column, this.End.Row, intersection.Start.Column - 1) );
 
 				//Bottom
 				if (this.End.Row > intersection.End.Row)
-					excluded.Add( new Range(intersection.End.Row + 1, intersection.Start.Column, this.End.Row, intersection.End.Column) );
+					excluded.Add( new SgRange(intersection.End.Row + 1, intersection.Start.Column, this.End.Row, intersection.End.Column) );
 
 				//Bottom Right
 				if (this.End.Row > intersection.End.Row &&
 					this.End.Column > intersection.End.Column)
-					excluded.Add( new Range(intersection.End.Row + 1, intersection.End.Column + 1, this.End.Row, this.End.Column) );
+					excluded.Add( new SgRange(intersection.End.Row + 1, intersection.End.Column + 1, this.End.Row, this.End.Column) );
 			}
 
 			return excluded;
@@ -452,7 +451,7 @@ namespace SourceGrid
 		/// <summary>
 		/// Rectangle that contains the range.
 		/// </summary>
-		Range GetRange(GridVirtual p_grid);
+		SgRange GetRange(GridVirtual p_grid);
 	}
 
 	/// <summary>
@@ -472,7 +471,7 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Grid"></param>
 		/// <returns></returns>
-		public Range GetRange(GridVirtual p_Grid)
+		public SgRange GetRange(GridVirtual p_Grid)
 		{
 			return p_Grid.CompleteRange;
 		}
@@ -495,12 +494,12 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Grid"></param>
 		/// <returns></returns>
-		public Range GetRange(GridVirtual p_Grid)
+		public SgRange GetRange(GridVirtual p_Grid)
 		{
 			if (p_Grid.Rows.Count>=p_Grid.FixedRows)
-				return new Range(p_Grid.FixedRows,0,p_Grid.Rows.Count-1,p_Grid.Columns.Count-1);
+				return new SgRange(p_Grid.FixedRows,0,p_Grid.Rows.Count-1,p_Grid.Columns.Count-1);
 			else
-				return Range.Empty;
+				return SgRange.Empty;
 		}
 	}
 	/// <summary>
@@ -520,12 +519,12 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Grid"></param>
 		/// <returns></returns>
-		public Range GetRange(GridVirtual p_Grid)
+		public SgRange GetRange(GridVirtual p_Grid)
 		{
 			if (p_Grid.Columns.Count >= p_Grid.FixedColumns)
-				return new Range(0,p_Grid.FixedColumns,p_Grid.Rows.Count-1, p_Grid.Columns.Count-1);
+				return new SgRange(0,p_Grid.FixedColumns,p_Grid.Rows.Count-1, p_Grid.Columns.Count-1);
 			else
-				return Range.Empty;
+				return SgRange.Empty;
 		}
 	}
 
@@ -547,12 +546,12 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Grid"></param>
 		/// <returns></returns>
-		public Range GetRange(GridVirtual p_Grid)
+		public SgRange GetRange(GridVirtual p_Grid)
 		{
 			if (p_Grid.Rows.Count>=p_Grid.FixedRows)
-				return new Range(0,0,p_Grid.FixedRows,p_Grid.Columns.Count-1);
+				return new SgRange(0,0,p_Grid.FixedRows,p_Grid.Columns.Count-1);
 			else
-				return Range.Empty;
+				return SgRange.Empty;
 		}
 	}
 	/// <summary>
@@ -572,12 +571,12 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Grid"></param>
 		/// <returns></returns>
-		public Range GetRange(GridVirtual p_Grid)
+		public SgRange GetRange(GridVirtual p_Grid)
 		{
 			if (p_Grid.Columns.Count >= p_Grid.FixedColumns)
-				return new Range(0, 0, p_Grid.Rows.Count-1, p_Grid.FixedColumns);
+				return new SgRange(0, 0, p_Grid.Rows.Count-1, p_Grid.FixedColumns);
 			else
-				return Range.Empty;
+				return SgRange.Empty;
 		}
 	}
 
@@ -586,11 +585,11 @@ namespace SourceGrid
 	/// </summary>
 	public class RangeLoader : IRangeLoader
 	{
-		private Range mRange;
+		private SgRange mRange;
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public RangeLoader(Range range)
+		public RangeLoader(SgRange range)
 		{
 			mRange = range;
 		}
@@ -598,7 +597,7 @@ namespace SourceGrid
 		/// <summary>
 		/// Gets or sets the Range loaded in the class.
 		/// </summary>
-		public Range Range
+		public SgRange Range
 		{
 			get{return mRange;}
 			set{mRange = value;}
@@ -609,7 +608,7 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="p_Grid"></param>
 		/// <returns></returns>
-		public virtual Range GetRange(GridVirtual p_Grid)
+		public virtual SgRange GetRange(GridVirtual p_Grid)
 		{
 			return mRange;
 		}

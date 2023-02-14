@@ -12,18 +12,18 @@ namespace SourceGrid.Selection
 	/// </summary>
 	public class RangeMergerByCells
 	{
-		private List<Range> m_ranges = new List<Range>();
+		private List<SgRange> m_ranges = new List<SgRange>();
 		
 		private bool IntersectWithCurrentRangesRecursive(RangeRegion rangeRegionToIntersect)
 		{
 			// check against each range
-			foreach (Range range in m_ranges)
+			foreach (SgRange range in m_ranges)
 			{
 				RangeRegion excludedResults = null;
-				Range remove = Range.Empty;
+				SgRange remove = SgRange.Empty;
 				bool excluded = false;
 				// loop through our new ranges
-				foreach (Range rangeToIntersect in rangeRegionToIntersect)
+				foreach (SgRange rangeToIntersect in rangeRegionToIntersect)
 				{
 					// if we intersect with at least one range
 					// get the exclusion range.
@@ -55,10 +55,10 @@ namespace SourceGrid.Selection
 			return rangeRegionToIntersect;
 		}
 		
-		public RangeMergerByCells AddRange(Range rangeToAdd)
+		public RangeMergerByCells AddRange(SgRange rangeToAdd)
 		{
 			RangeRegion rangeRegionToAdd = IntersectWithCurrentRanges(new RangeRegion(rangeToAdd));
-			foreach (Range range in rangeRegionToAdd)
+			foreach (SgRange range in rangeRegionToAdd)
 			{
 				m_ranges.Add(range);
 			}
@@ -66,9 +66,9 @@ namespace SourceGrid.Selection
 			return this;
 		}
 		
-		private void Join(Range range1, Range range2)
+		private void Join(SgRange range1, SgRange range2)
 		{
-			Range result = Range.GetBounds(range1, range2);
+			SgRange result = SgRange.GetBounds(range1, range2);
 			m_ranges.Remove(range1);
 			m_ranges.Remove(range2);
 			m_ranges.Add(result);
@@ -89,10 +89,10 @@ namespace SourceGrid.Selection
 		/// <returns>true, if at least two ranges were joined into single</returns>
 		private bool JoinAdjancedRecursive()
 		{
-			List<Range> cloneRanges = new List<Range>(m_ranges);
-			foreach (Range clonedRange in cloneRanges)
+			List<SgRange> cloneRanges = new List<SgRange>(m_ranges);
+			foreach (SgRange clonedRange in cloneRanges)
 			{
-				foreach (Range rangeToTest in m_ranges)
+				foreach (SgRange rangeToTest in m_ranges)
 				{
 					if (rangeToTest.Equals(clonedRange))
 						continue;
@@ -122,7 +122,7 @@ namespace SourceGrid.Selection
 			return false;
 		}
 		
-		public List<Range> GetSelectedRowRegions()
+		public List<SgRange> GetSelectedRowRegions()
 		{
 			return m_ranges;
 		}
@@ -164,7 +164,7 @@ namespace SourceGrid.Selection
 
 		public override void SelectColumn(int column, bool select)
 		{
-			Range rng = Grid.Columns.GetRange(column);
+			SgRange rng = Grid.Columns.GetRange(column);
 
 			SelectRange(rng, select);
 		}
@@ -176,7 +176,7 @@ namespace SourceGrid.Selection
 
 		public override void SelectRow(int row, bool select)
 		{
-			Range rng = Grid.Rows.GetRange(row);
+			SgRange rng = Grid.Rows.GetRange(row);
 
 			SelectRange(rng, select);
 		}
@@ -191,14 +191,14 @@ namespace SourceGrid.Selection
 			SelectRange(Grid.PositionToCellRange(position), select);
 		}
 
-		public override bool IsSelectedRange(Range range)
+		public override bool IsSelectedRange(SgRange range)
 		{
 			return mRegion.Contains(range);
 		}
 
-		public override void SelectRange(Range range, bool select)
+		public override void SelectRange(SgRange range, bool select)
 		{
-			Range newRange = Grid.RangeToCellRange(range);
+			SgRange newRange = Grid.RangeToCellRange(range);
 			if (select)
 				mRegion.Add(ValidateRange(newRange));
 			else
@@ -233,7 +233,7 @@ namespace SourceGrid.Selection
 		/// </summary>
 		/// <param name="rng"></param>
 		/// <returns></returns>
-		public override bool IntersectsWith(Range rng)
+		public override bool IntersectsWith(SgRange rng)
 		{
 			return mRegion.IntersectsWith(rng);
 		}

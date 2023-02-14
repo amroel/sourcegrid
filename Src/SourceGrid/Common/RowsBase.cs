@@ -289,9 +289,9 @@ namespace SourceGrid
 			ResumeLayout();
 		}
 		
-		public Range GetRange(int row)
+		public SgRange GetRange(int row)
 		{
-			return new Range(row, 0, row, Grid.Columns.Count-1);
+			return new SgRange(row, 0, row, Grid.Columns.Count-1);
 		}
 		
 		#region Layout

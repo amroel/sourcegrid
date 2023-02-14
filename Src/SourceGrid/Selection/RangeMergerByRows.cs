@@ -22,7 +22,7 @@ namespace SourceGrid.Selection
 	/// </summary>
 	public class RangeMergerByRows
 	{
-		private List<Range> m_ranges = new List<Range>();
+		private List<SgRange> m_ranges = new List<SgRange>();
 		private int m_columnStart = 0;
 		private int m_columnEnd = 0;
 		
@@ -37,7 +37,7 @@ namespace SourceGrid.Selection
 		
 		private void InternalAdd(RangeRegion rangeRegion)
 		{
-			foreach (Range range in rangeRegion)
+			foreach (SgRange range in rangeRegion)
 			{
 				m_ranges.Add(range);
 			}
@@ -49,7 +49,7 @@ namespace SourceGrid.Selection
 		/// from lowest row to highest.
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<Range> LoopAllRanges()
+		public IEnumerable<SgRange> LoopAllRanges()
 		{
 			foreach (var row in m_ranges)
 			{
@@ -63,14 +63,14 @@ namespace SourceGrid.Selection
 		/// <param name="startColumn">start column, usually 0</param>
 		/// <param name="endColumn">end column, usually equals to column count - 1</param>
 		/// <returns></returns>
-		public List<Range> GetSelectedRowRegions(int startColumn, int endColumn)
+		public List<SgRange> GetSelectedRowRegions(int startColumn, int endColumn)
 		{
 			if (startColumn > endColumn)
 				throw new ArgumentException("end column can not be less than startColumn");
-			List<Range> ranges = new List<Range>();
-			foreach (Range range in m_ranges)
+			List<SgRange> ranges = new List<SgRange>();
+			foreach (SgRange range in m_ranges)
 			{
-				ranges.Add(new Range(range.Start.Row, startColumn, range.End.Row, endColumn));
+				ranges.Add(new SgRange(range.Start.Row, startColumn, range.End.Row, endColumn));
 			}
 			return ranges;
 		}
@@ -79,12 +79,12 @@ namespace SourceGrid.Selection
 		/// </summary>
 		/// <param name="rangeToMerge"></param>
 		/// <returns></returns>
-		private void Merge(Range rangeToMerge)
+		private void Merge(SgRange rangeToMerge)
 		{
 			while (true)
 			{
 				rangeToMerge = MergeRecursive(rangeToMerge);
-				if (rangeToMerge == Range.Empty)
+				if (rangeToMerge == SgRange.Empty)
 					return;
 			}
 		}
@@ -96,11 +96,11 @@ namespace SourceGrid.Selection
 		/// </summary>
 		/// <param name="rangeToMerge"></param>
 		/// <returns></returns>
-		private Range MergeRecursive(Range rangeToMerge)
+		private SgRange MergeRecursive(SgRange rangeToMerge)
 		{
 			for (int i = 0; i < m_ranges.Count; i++)
 			{
-				Range range = m_ranges[i];
+				SgRange range = m_ranges[i];
 				if (range.IntersectsWith(rangeToMerge))
 				{
 					m_ranges.Remove(range);
@@ -108,7 +108,7 @@ namespace SourceGrid.Selection
 				}
 			}
 			m_ranges.Add(rangeToMerge);
-			return Range.Empty;
+			return SgRange.Empty;
 		}
 		
 		/// <summary>
@@ -120,11 +120,11 @@ namespace SourceGrid.Selection
 			SortList();
 			for (int i = 0; i < m_ranges.Count - 1; i++)
 			{
-				Range first = m_ranges[i];
-				Range second = m_ranges[i+1];
+				SgRange first = m_ranges[i];
+				SgRange second = m_ranges[i+1];
 				if (first.End.Row + 1 >= second.Start.Row)
 				{
-					Range newRange = new Range(first.Start.Row, m_columnStart,
+					SgRange newRange = new SgRange(first.Start.Row, m_columnStart,
 					                           second.End.Row, m_columnEnd);
 					m_ranges.Remove(first);
 					m_ranges.Remove(second);
@@ -142,9 +142,9 @@ namespace SourceGrid.Selection
 			}
 		}
 		
-		private Range NormalizeRange(Range rangeToNormalize)
+		private SgRange NormalizeRange(SgRange rangeToNormalize)
 		{
-			return new Range(rangeToNormalize.Start.Row, m_columnStart,
+			return new SgRange(rangeToNormalize.Start.Row, m_columnStart,
 			                 rangeToNormalize.End.Row, m_columnEnd);
 		}
 		
@@ -159,7 +159,7 @@ namespace SourceGrid.Selection
 		/// <param name="rangeToAdd">columns values are ignored, so simply 
 		/// put 0 as start colum and 1 as end column. Only row values matter</param>
 		/// <returns></returns>
-		public RangeMergerByRows AddRange(Range rangeToAdd)
+		public RangeMergerByRows AddRange(SgRange rangeToAdd)
 		{
 			rangeToAdd = NormalizeRange(rangeToAdd);
 			Merge(rangeToAdd);
@@ -173,7 +173,7 @@ namespace SourceGrid.Selection
 		/// <param name="first"></param>
 		/// <param name="second"></param>
 		/// <returns></returns>
-		private Range MergeByRow(Range first, Range second)
+		private SgRange MergeByRow(SgRange first, SgRange second)
 		{
 			int x = first.Start.Row;
 			if (x > second.Start.Row)
@@ -182,18 +182,18 @@ namespace SourceGrid.Selection
 			int x1 = first.End.Row;
 			if (x1 < second.End.Row)
 				x1 = second.End.Row;
-			return new Range(x, m_columnStart, x1, m_columnEnd);
+			return new SgRange(x, m_columnStart, x1, m_columnEnd);
 		}
 		
-		private bool RemoveRangeRecursive(Range rangeToRemove)
+		private bool RemoveRangeRecursive(SgRange rangeToRemove)
 		{
 			rangeToRemove = NormalizeRange(rangeToRemove);
 			for (int i = 0; i < m_ranges.Count; i++)
 			{
-				Range range = m_ranges[i];
+				SgRange range = m_ranges[i];
 				if (range.IntersectsWith(rangeToRemove) == false)
 					continue;
-				Range intersection = range.Intersect(rangeToRemove);
+				SgRange intersection = range.Intersect(rangeToRemove);
 				m_ranges.Remove(range);
 				RangeRegion excludedRanges = range.Exclude(intersection);
 				InternalAdd(excludedRanges);
@@ -212,7 +212,7 @@ namespace SourceGrid.Selection
 		/// </summary>
 		/// <param name="rangeToRemove"></param>
 		/// <returns></returns>
-		public RangeMergerByRows RemoveRange(Range rangeToRemove)
+		public RangeMergerByRows RemoveRange(SgRange rangeToRemove)
 		{
 			while (RemoveRangeRecursive(rangeToRemove))
 			{
@@ -228,7 +228,7 @@ namespace SourceGrid.Selection
 		public IList<int> GetRowsIndex()
 		{
 			IList<int> rowIndex = new List<int>();
-			foreach (Range range in m_ranges)
+			foreach (SgRange range in m_ranges)
 			{
 				for (int r = range.Start.Row; r <= range.End.Row; r++)
 				{
@@ -246,7 +246,7 @@ namespace SourceGrid.Selection
 		public bool IsSelectedRow(int rowIndex)
 		{
 			Position p = new Position(rowIndex, 0);
-			foreach (Range range in m_ranges)
+			foreach (SgRange range in m_ranges)
 			{
 				if (range.Contains(p) == true)
 					return true;

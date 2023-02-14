@@ -142,7 +142,7 @@ namespace SourceGrid.Tests
 
             //Todo: sandhra: check if this case is ok? span changed range didnot
             Assert.That(cell.RowSpan, Is.EqualTo(2));
-            Assert.That(cell.Range, Is.EqualTo(Range.Empty));
+            Assert.That(cell.Range, Is.EqualTo(SgRange.Empty));
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace SourceGrid.Tests
 
             //Todo: sandhra: check if this case is ok? span changed range didnot
             Assert.That(cell.ColumnSpan, Is.EqualTo(2));
-            Assert.That(cell.Range, Is.EqualTo(Range.Empty));
+            Assert.That(cell.Range, Is.EqualTo(SgRange.Empty));
         }
         #endregion ColumnSpan & RowSpan
 
@@ -166,7 +166,7 @@ namespace SourceGrid.Tests
             Cell cell = new Cell("Unbound cell");
             Assert.That(cell.Grid, Is.Null);
 
-            Assert.That(cell.Range, Is.EqualTo(Range.Empty));
+            Assert.That(cell.Range, Is.EqualTo(SgRange.Empty));
         }
 
         [Test]
@@ -177,7 +177,7 @@ namespace SourceGrid.Tests
             grid[0,0] = new Cell("cell");
             grid[0, 0].ColumnSpan = 3;
 
-            Assert.That(grid[0, 0].Range, Is.EqualTo(new Range(0,0,0,2)));
+            Assert.That(grid[0, 0].Range, Is.EqualTo(new SgRange(0,0,0,2)));
         }
 
         #endregion range

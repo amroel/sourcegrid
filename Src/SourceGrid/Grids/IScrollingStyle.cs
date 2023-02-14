@@ -51,10 +51,10 @@ namespace SourceGrid
         void CustomScrollPageUp(int line);
         void CustomScrollPageDown(int line);
 
-        Range GetFixedLeftRange();
+        SgRange GetFixedLeftRange();
 
-        Range GetFixedTopRange();
-        Range GetScrollableRange();
+        SgRange GetFixedTopRange();
+        SgRange GetScrollableRange();
         bool IsColumnHiddenUnderFixedColumn(int column, bool includePartial);
 
         bool IsRowHiddenUnderFixedRows(int rowIndex, bool includePartial);
@@ -76,7 +76,7 @@ namespace SourceGrid
         void RecalcVScrollBar(int rows);
 
         void Paint(System.Windows.Forms.PaintEventArgs e);
-        void PaintMergedCell(GraphicsCache graphics, Range cellRange, CellContext cellContext);
+        void PaintMergedCell(GraphicsCache graphics, SgRange cellRange, CellContext cellContext);
         
         List<int> ColumnsInsideRegion(int x, int width, bool returnsPartial, bool returnsFixedColumns);
         List<int> RowsInsideRegion(int y, int height, bool returnsPartial, bool returnsFixedRows);
@@ -84,9 +84,9 @@ namespace SourceGrid
         int GetLeft(int column);
         int GetTop(int row);
 
-        Rectangle RangeToVisibleRectangle(Range range);
+        Rectangle RangeToVisibleRectangle(SgRange range);
 
-        BorderPartType GetBorderType(Range rng);
+        BorderPartType GetBorderType(SgRange rng);
 
         void ScrollOnPoint(Point mousePoint);
     }

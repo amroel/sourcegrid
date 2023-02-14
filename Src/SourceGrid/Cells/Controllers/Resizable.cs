@@ -165,14 +165,14 @@ namespace SourceGrid.Cells.Controllers
 
         private void SetWidth(GridVirtual grid, Position position, int width)
         {
-            Range range = grid.PositionToCellRange(position);
+            SgRange range = grid.PositionToCellRange(position);
             int widthForCol = width / range.ColumnsCount;
             for (int c = range.Start.Column; c <= range.End.Column; c++)
                 grid.Columns.SetWidth(c, widthForCol);
         }
         private void SetHeight(GridVirtual grid, Position position, int height)
         {
-            Range range = grid.PositionToCellRange(position);
+            SgRange range = grid.PositionToCellRange(position);
             int heightForCol = height / range.RowsCount;
             for (int r = range.Start.Row; r <= range.End.Row; r++)
                 grid.Rows.SetHeight(r, heightForCol);

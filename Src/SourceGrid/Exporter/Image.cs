@@ -12,7 +12,7 @@ namespace SourceGrid.Exporter
         {
         }
 
-        public virtual System.Drawing.Bitmap Export(GridVirtual grid, Range rangeToExport)
+        public virtual System.Drawing.Bitmap Export(GridVirtual grid, SgRange rangeToExport)
         {
             System.Drawing.Bitmap bitmap = null;
 
@@ -42,7 +42,7 @@ namespace SourceGrid.Exporter
         }
 
         public virtual void Export(GridVirtual grid, System.Drawing.Graphics graphics, 
-                                Range rangeToExport, System.Drawing.Point destinationLocation)
+                                SgRange rangeToExport, System.Drawing.Point destinationLocation)
         {
             if (rangeToExport.IsEmpty())
                 return;
@@ -62,7 +62,7 @@ namespace SourceGrid.Exporter
 
                         Size cellSize = new Size(grid.Columns.GetWidth(c), rowHeight);
 
-                        Range range = grid.PositionToCellRange(pos);
+                        SgRange range = grid.PositionToCellRange(pos);
 
                         //support for RowSpan or ColSpan 
                         //Note: for now I draw only the merged cell at the first position 

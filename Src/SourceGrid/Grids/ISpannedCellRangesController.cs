@@ -34,7 +34,7 @@ namespace SourceGrid
 		/// Updates range only when existing range with given start position is found
 		/// </summary>
 		/// <param name="newRange"></param>
-		void UpdateOrAdd(Range newRange);
-		void Update(Range newRange);
+		void UpdateOrAdd(SgRange newRange);
+		void Update(SgRange newRange);
 	}
 }

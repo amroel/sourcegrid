@@ -292,7 +292,7 @@ namespace SourceGrid
 	{
 		public RangePaintEventArgs(GridVirtual grid,
 		                           DevAge.Drawing.GraphicsCache graphicsCache,
-		                           Range drawingRange)
+		                           SgRange drawingRange)
 		{
 			mGrid = grid;
 			mGraphicsCache = graphicsCache;
@@ -312,8 +312,8 @@ namespace SourceGrid
 			set { mGraphicsCache = value; }
 		}
 
-		private Range mDrawingRange;
-		public Range DrawingRange
+		private SgRange mDrawingRange;
+		public SgRange DrawingRange
 		{
 			get { return mDrawingRange; }
 			set { mDrawingRange = value; }
@@ -324,13 +324,13 @@ namespace SourceGrid
 
 	public class RangeEventArgs : EventArgs
 	{
-		private Range m_GridRange;
-		public RangeEventArgs(Range p_GridRange)
+		private SgRange m_GridRange;
+		public RangeEventArgs(SgRange p_GridRange)
 		{
 			m_GridRange = p_GridRange;
 		}
 
-		public Range Range
+		public SgRange Range
 		{
 			get{return m_GridRange;}
 		}
@@ -340,7 +340,7 @@ namespace SourceGrid
 
 	public class RangeCancelEventArgs : RangeEventArgs
 	{
-		public RangeCancelEventArgs(Range p_GridRange):base(p_GridRange)
+		public RangeCancelEventArgs(SgRange p_GridRange):base(p_GridRange)
 		{
 		}
 
@@ -414,16 +414,16 @@ namespace SourceGrid
 
 	public class SelectionChangeEventArgs : EventArgs
 	{
-		public SelectionChangeEventArgs(SelectionChangeEventType p_Type, Range p_Range)
+		public SelectionChangeEventArgs(SelectionChangeEventType p_Type, SgRange p_Range)
 		{
 			m_Type = p_Type;
 			m_Range = p_Range;
 		}
 
-		private Range m_Range;
+		private SgRange m_Range;
 		private SelectionChangeEventType m_Type;
 
-		public Range Range
+		public SgRange Range
 		{
 			get{return m_Range;}
 		}
@@ -462,12 +462,12 @@ namespace SourceGrid
 
 	public class SortRangeRowsEventArgs : EventArgs
 	{
-		private Range m_Range;
+		private SgRange m_Range;
 		private int mKeyColumn;
 		private bool m_bAscending;
 		private IComparer m_CellComparer;
 
-		public SortRangeRowsEventArgs(Range p_Range,
+		public SortRangeRowsEventArgs(SgRange p_Range,
 		                              int keyColumn,
 		                              bool p_bAscending,
 		                              IComparer p_CellComparer)
@@ -478,7 +478,7 @@ namespace SourceGrid
 			m_CellComparer = p_CellComparer;
 		}
 
-		public Range Range
+		public SgRange Range
 		{
 			get{return m_Range;}
 		}
@@ -554,7 +554,7 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="addedRange"></param>
 		/// <param name="removedRange"></param>
-		public RangeRegionChangedEventArgs(Range addedRange, Range removedRange)
+		public RangeRegionChangedEventArgs(SgRange addedRange, SgRange removedRange)
 		{
 			if (addedRange.IsEmpty() == false)
 				this.addedRange = new RangeRegion(addedRange);

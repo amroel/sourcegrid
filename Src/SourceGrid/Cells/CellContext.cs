@@ -61,7 +61,7 @@ namespace SourceGrid
 				throw new SourceGridException("Grid is null");
 
 			System.Drawing.Size requiredSize = Cell.View.Measure(this, maxLayoutArea);
-			Range range = Grid.PositionToCellRange(Position);
+			SgRange range = Grid.PositionToCellRange(Position);
 
 			//Approximate the width and Height value if ColSpan or RowSpan are grater than 1
 			// round to the greater value
@@ -225,7 +225,7 @@ namespace SourceGrid
 		/// Calculate the Range occupied by the current cell. Usually it is simply the Position property, only if RowSpan or ColumnSpan is used this property returns a larger range.
 		/// Internally use the Grid.PositionToCellRange method.
 		/// </summary>
-		public Range CellRange
+		public SgRange CellRange
 		{
 			get
 			{

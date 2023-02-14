@@ -108,14 +108,14 @@ namespace SourceGrid
 		}
 	
 	
-		public Range Range
+		public SgRange Range
 		{
 			get
 			{
 				if (m_Grid == null)
 					throw new SourceGridException("Invalid Grid object");
 	
-				return new Range(0, Index, Grid.Rows.Count - 1, Index);
+				return new SgRange(0, Index, Grid.Rows.Count - 1, Index);
 			}
 		}
 	

@@ -55,7 +55,7 @@ namespace SourceGrid.Decorators
 
 		private Selection.SelectionBase mSelection;
 
-		public override bool IntersectWith(Range range)
+		public override bool IntersectWith(SgRange range)
 		{
 			return mSelection.IntersectsWith(range);
 		}
@@ -69,14 +69,14 @@ namespace SourceGrid.Decorators
 
             //sandhra.prakash@siemens.com: To support freezePanes enahancement
 	        // get visible range for data area
-            Range dataRange = mSelection.Grid.CompleteRange;
+            SgRange dataRange = mSelection.Grid.CompleteRange;
             
             System.Drawing.Brush brush = e.GraphicsCache.BrushsCache.GetBrush(mSelection.BackColor);
 
 	        CellContext focusContext = new CellContext(e.Grid, mSelection.ActivePosition);
 	        // get focus rectangle
 	        // clipped to visible range
-            Range focusClippedRange = dataRange.Intersect(new Range(mSelection.ActivePosition, mSelection.ActivePosition));
+            SgRange focusClippedRange = dataRange.Intersect(new SgRange(mSelection.ActivePosition, mSelection.ActivePosition));
 	        System.Drawing.Rectangle focusRect = e.Grid.PositionToVisibleRectangle(focusClippedRange.Start);
 
             //sandhra.prakash@siemens.com: To support smooth scrolling. Otherwise transform will not be applied.
@@ -85,12 +85,12 @@ namespace SourceGrid.Decorators
 
 	        bool isFocusCellVisible = e.Grid.IsCellVisible(focusContext.Position, true);
 	        //Draw each selection range
-	        foreach (Range rangeToLoop in region)
+	        foreach (SgRange rangeToLoop in region)
 	        {
 	            // intersect given range with visible range
 	            // this way we ensure we don't loop through thousands
 	            // of rows to calculate rectToDraw
-                Range rng = dataRange.Intersect(rangeToLoop);
+                SgRange rng = dataRange.Intersect(rangeToLoop);
 
                 //sandhra.prakash@siemens.com: To support freezePanes enahancement
 	            System.Drawing.Rectangle rectToDraw = e.Grid.RangeToVisibleRectangle(rng);
@@ -104,7 +104,7 @@ namespace SourceGrid.Decorators
 
 	            System.Drawing.Region regionToDraw = new System.Drawing.Region(rectToDraw);
 
-                Range cellRange = e.Grid.PositionToCellRange(focusContext.Position);
+                SgRange cellRange = e.Grid.PositionToCellRange(focusContext.Position);
                 //sandhra.prakash@siemens.com: To support freezePanes enahancement: Only if the cell is visible exclude it. It can be hidden under a fixedrow\column
                 if (rectToDraw.IntersectsWith(focusRect) && (isFocusCellVisible || rng.Contains(cellRange)))
 	                regionToDraw.Exclude(focusRect);
@@ -135,7 +135,7 @@ namespace SourceGrid.Decorators
            
 	    }
 
-        private static BorderPartType GetBorderType(GridVirtual grid, Range rng)
+        private static BorderPartType GetBorderType(GridVirtual grid, SgRange rng)
         {
             //sandhra.prakash@siemens: To optimise calculations.
             return grid.ScrollingStyle.GetBorderType(rng);          

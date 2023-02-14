@@ -175,7 +175,7 @@ namespace SourceGrid
             m_Grid.CustomScrollPageToLine(line - m_Grid.ActualFixedRows);
         }
 
-        public Range GetScrollableRange()
+        public SgRange GetScrollableRange()
         {
             int? firstRow = FirstVisibleScrollableRow;
             int? lastRow = LastVisibleScrollableRow;
@@ -185,9 +185,9 @@ namespace SourceGrid
 
             if (firstRow == null || firstCol == null ||
                 lastRow == null || lastCol == null)
-                return Range.Empty;
+                return SgRange.Empty;
 
-            return new Range(firstRow.Value, firstCol.Value,
+            return new SgRange(firstRow.Value, firstCol.Value,
                 lastRow.Value, lastCol.Value);
         }
 
@@ -307,40 +307,40 @@ namespace SourceGrid
             return true;
         }
 
-        public Range GetFixedTopRange()
+        public SgRange GetFixedTopRange()
         {
             int actualFixed = m_Grid.FixedRows;
             if (actualFixed > m_Grid.Rows.Count)
                 actualFixed = m_Grid.Rows.Count;
 
             if (actualFixed <= 0)
-                return Range.Empty;
+                return SgRange.Empty;
 
             int? firstCol = FirstVisibleScrollableColumn;
             int? lastCol = LastVisibleScrollableColumn;
 
             if (firstCol == null || lastCol == null)
-                return Range.Empty;
+                return SgRange.Empty;
 
-            return new Range(0, firstCol.Value, actualFixed - 1, lastCol.Value);
+            return new SgRange(0, firstCol.Value, actualFixed - 1, lastCol.Value);
         }
 
-        public Range GetFixedLeftRange()
+        public SgRange GetFixedLeftRange()
         {
             int actualFixed = m_Grid.FixedColumns;
             if (actualFixed > m_Grid.Columns.Count)
                 actualFixed = m_Grid.Columns.Count;
 
             if (actualFixed <= 0)
-                return Range.Empty;
+                return SgRange.Empty;
 
             int? firstRow = FirstVisibleScrollableRow;
             int? lastRow = LastVisibleScrollableRow;
 
             if (firstRow == null || lastRow == null)
-                return Range.Empty;
+                return SgRange.Empty;
 
-            return new Range(firstRow.Value, 0, lastRow.Value, actualFixed - 1);
+            return new SgRange(firstRow.Value, 0, lastRow.Value, actualFixed - 1);
         }
 
         /// <summary>
@@ -393,14 +393,14 @@ namespace SourceGrid
             //NOTE: For now I draw all the visible cells (not only the invalidated cells).
             using (GraphicsCache grCache = new GraphicsCache(e.Graphics, e.ClipRectangle))
             {
-                foreach (Range rng in m_Grid.GetVisibleRegion())
+                foreach (SgRange rng in m_Grid.GetVisibleRegion())
                 {
                     m_Grid.OnRangePaint(new RangePaintEventArgs(m_Grid, grCache, rng));
                 }
             }
         }
 
-        public void PaintMergedCell(GraphicsCache graphics, Range cellRange, CellContext cellContext)
+        public void PaintMergedCell(GraphicsCache graphics, SgRange cellRange, CellContext cellContext)
         {
             Grid grid = m_Grid as Grid;
             if (grid == null)
@@ -622,7 +622,7 @@ namespace SourceGrid
             throw new IndexOutOfRangeException(string.Format("row value is {0}", row));
         }
 
-        public Rectangle RangeToVisibleRectangle(Range range)
+        public Rectangle RangeToVisibleRectangle(SgRange range)
         {
             if (range.IsEmpty())
                 return Rectangle.Empty;
@@ -679,7 +679,7 @@ namespace SourceGrid
             return new Rectangle(new Point(x, y), size);
         }
 
-        public BorderPartType GetBorderType(Range rng)
+        public BorderPartType GetBorderType(SgRange rng)
         {
             BorderPartType partType = BorderPartType.All;
             if (m_Grid.IsRowHiddenUnderFixedRows(rng.End.Row))
@@ -748,7 +748,7 @@ namespace SourceGrid
         ///  </summary>
         ///  <param name="range"></param>
         /// <returns></returns>
-        private int FindFirstVisibleRowFromRange(Range range)
+        private int FindFirstVisibleRowFromRange(SgRange range)
         {
             if (range.Start.Row <= m_Grid.ActualFixedRows - 1)
                 return range.Start.Row;
@@ -769,7 +769,7 @@ namespace SourceGrid
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        private int FindFirstVisibleColumnFromRange(Range range)
+        private int FindFirstVisibleColumnFromRange(SgRange range)
         {
             if (range.Start.Column <= m_Grid.ActualFixedColumns - 1)
                 return range.Start.Column;

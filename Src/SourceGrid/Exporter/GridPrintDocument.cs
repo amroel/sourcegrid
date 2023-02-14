@@ -44,9 +44,9 @@ namespace SourceGrid.Exporter
 			m_PageFooterFont = new Font(grid.Font, FontStyle.Regular);
 		}
 
-		private Range m_RangeToPrint = Range.Empty;
+		private SgRange m_RangeToPrint = SgRange.Empty;
 
-		public Range RangeToPrint {
+		public SgRange RangeToPrint {
 			get { return m_RangeToPrint; }
 			set
 			{
@@ -254,7 +254,7 @@ namespace SourceGrid.Exporter
 		{
 			base.OnBeginPrint(e);
 			if (RangeToPrint.IsEmpty())
-				RangeToPrint = new Range(0, 0, m_Grid.Rows.Count - 1, m_Grid.Columns.Count - 1);
+				RangeToPrint = new SgRange(0, 0, m_Grid.Rows.Count - 1, m_Grid.Columns.Count - 1);
 
 			// Force no border
 			m_CellPrintView.Border = RectangleBorder.NoBorder;
@@ -407,7 +407,7 @@ namespace SourceGrid.Exporter
 					}
 					RectangleF cellRectangle;
 					Position pos = new Position(m_NextRowToPrint, m_NextColumnToPrint);
-					Range range = m_Grid.PositionToCellRange(pos);
+					SgRange range = m_Grid.PositionToCellRange(pos);
 
 					// Check if cell is spanned
 					if ( range.ColumnsCount > 1 || range.RowsCount > 1 )

@@ -1,8 +1,6 @@
-﻿using SourceGrid;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
+using SourceGrid;
 
 namespace QuadTreeLib
 {
@@ -43,18 +41,18 @@ namespace QuadTreeLib
 			var QuadTree = currentRoot.QuadTree;
 			
 			var newRoot = new QuadTreeNode(
-				new Range(startRow, startCol, halfCol * 2, halfRow * 2),
+				new SgRange(startRow, startCol, halfCol * 2, halfRow * 2),
 				currentRoot.Depth, currentRoot.QuadTree);
 			
 			
 			newRoot.Nodes.Add(currentRoot);
-			newRoot.Nodes.Add(new QuadTreeNode(Range.From(
+			newRoot.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow, startCol + halfCol),
 				halfRow, halfCol), Depth, QuadTree));
-			newRoot.Nodes.Add(new QuadTreeNode(Range.From(
+			newRoot.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow + halfRow, startCol),
 				halfRow, halfCol), Depth, QuadTree));
-			newRoot.Nodes.Add(new QuadTreeNode(Range.From(
+			newRoot.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow + halfRow, startCol + halfCol),
 				halfRow, halfCol), Depth, QuadTree));
 			return newRoot;
@@ -90,8 +88,8 @@ namespace QuadTreeLib
 			var Depth = parentNode.Depth;
 			var QuadTree = parentNode.QuadTree;
 			
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(m_bounds.Start, halfRow, halfCol), Depth, QuadTree));
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(m_bounds.Start, halfRow, halfCol), Depth, QuadTree));
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow + halfRow, startCol),
 				halfRow, halfCol), Depth, QuadTree));
 		}
@@ -107,14 +105,14 @@ namespace QuadTreeLib
 			var Depth = parentNode.Depth;
 			var QuadTree = parentNode.QuadTree;
 			
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(m_bounds.Start, halfRow, halfCol), Depth, QuadTree));
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(m_bounds.Start, halfRow, halfCol), Depth, QuadTree));
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow, startCol + halfCol),
 				halfRow, halfCol), Depth, QuadTree));
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow + halfRow, startCol),
 				halfRow, halfCol), Depth, QuadTree));
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow + halfRow, startCol + halfCol),
 				halfRow, halfCol), Depth, QuadTree));
 		}
@@ -153,14 +151,14 @@ namespace QuadTreeLib
 			var Depth = parentNode.Depth;
 			var QuadTree = parentNode.QuadTree;
 			
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(m_bounds.Start, halfRow, halfCol), Depth, QuadTree));
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(m_bounds.Start, halfRow, halfCol), Depth, QuadTree));
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow, startCol + halfCol),
 				halfRow, halfCol), Depth, QuadTree));
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow + halfRow, startCol),
 				halfRow, halfCol), Depth, QuadTree));
-			parentNode.Nodes.Add(new QuadTreeNode(Range.From(
+			parentNode.Nodes.Add(new QuadTreeNode(SgRange.From(
 				new Position(startRow + halfRow, startCol + halfCol),
 				halfRow, halfCol), Depth, QuadTree));
 		}
@@ -178,7 +176,7 @@ namespace QuadTreeLib
 			get { return m_nodes; }
 		}
 		
-		public QuadTreeNode(Range bounds)
+		public QuadTreeNode(SgRange bounds)
 		{
 			this.m_bounds = bounds;
 		}
@@ -186,7 +184,7 @@ namespace QuadTreeLib
 		/// <summary>
 		/// Construct a quadtree node with the given bounds
 		/// </summary>
-		public QuadTreeNode(Range bounds, int currentDepth, QuadTree quadTree)
+		public QuadTreeNode(SgRange bounds, int currentDepth, QuadTree quadTree)
 			:this(bounds)
 		{
 			m_bounds = bounds;
@@ -197,13 +195,13 @@ namespace QuadTreeLib
 		/// <summary>
 		/// The area of this node
 		/// </summary>
-		Range m_bounds;
+		SgRange m_bounds;
 
 		/// <summary>
 		/// The contents of this node.
 		/// Note that the contents have no limit: this is not the standard way to impement a QuadTree
 		/// </summary>
-		List<Range> m_contents = new List<Range>();
+		List<SgRange> m_contents = new List<SgRange>();
 
 		/// <summary>
 		/// The child nodes of the QuadTree
@@ -224,7 +222,7 @@ namespace QuadTreeLib
 		/// <summary>
 		/// Area of the quadtree node
 		/// </summary>
-		public Range Bounds { get { return m_bounds; } }
+		public SgRange Bounds { get { return m_bounds; } }
 
 		public int MaxDepth
 		{
@@ -262,11 +260,11 @@ namespace QuadTreeLib
 		/// <summary>
 		/// Return the contents of this node and all subnodes in the true below this one.
 		/// </summary>
-		public List<Range> SubTreeContents
+		public List<SgRange> SubTreeContents
 		{
 			get
 			{
-				List<Range> results = new List<Range>();
+				List<SgRange> results = new List<SgRange>();
 
 				foreach (QuadTreeNode node in m_nodes)
 					results.AddRange(node.SubTreeContents);
@@ -276,15 +274,15 @@ namespace QuadTreeLib
 			}
 		}
 
-		public List<Range> Contents { get { return m_contents; } }
+		public List<SgRange> Contents { get { return m_contents; } }
 
 		
-		public List<Range> Query(Range queryArea)
+		public List<SgRange> Query(SgRange queryArea)
 		{
 			return QueryInternal(queryArea, false);
 		}
 		
-		public Range? QueryFirst(Range queryArea)
+		public SgRange? QueryFirst(SgRange queryArea)
 		{
 			var results = QueryInternal(queryArea, true);
 			if (results.Count == 0)
@@ -296,10 +294,10 @@ namespace QuadTreeLib
 		/// Query the QuadTree for items that are in the given area
 		/// </summary>
 		/// <returns></returns>
-		public List<Range> QueryInternal(Range queryArea, bool stopOnFirst)
+		public List<SgRange> QueryInternal(SgRange queryArea, bool stopOnFirst)
 		{
 			// create a list of the items that are found
-			List<Range> results = new List<Range>();
+			List<SgRange> results = new List<SgRange>();
 
 			// this quad contains items that are not entirely contained by
 			// it's four sub-quads. Iterate through the items in this quad
@@ -352,10 +350,10 @@ namespace QuadTreeLib
 			return results;
 		}
 		
-		public List<Range> Query(Position queryArea)
+		public List<SgRange> Query(Position queryArea)
 		{
 			// create a list of the items that are found
-			List<Range> results = new List<Range>();
+			List<SgRange> results = new List<SgRange>();
 
 			// this quad contains items that are not entirely contained by
 			// it's four sub-quads. Iterate through the items in this quad
@@ -384,7 +382,7 @@ namespace QuadTreeLib
 			return results;
 		}
 		
-		public Range? QueryFirst(Position queryArea)
+		public SgRange? QueryFirst(Position queryArea)
 		{
 			// this quad contains items that are not entirely contained by
 			// it's four sub-quads. Iterate through the items in this quad
@@ -409,12 +407,12 @@ namespace QuadTreeLib
 			return null;
 		}
 
-		public bool Remove(Range range)
+		public bool Remove(SgRange SgRange)
 		{
 			// if the item is not contained in this quad, there's a problem
-			if (!m_bounds.Contains(range))
+			if (!m_bounds.Contains(SgRange))
 			{
-				throw new ArgumentException("range is out of the bounds of this quadtree node");
+				throw new ArgumentException("SgRange is out of the bounds of this quadtree node");
 			}
 
 			// for each subnode:
@@ -422,15 +420,15 @@ namespace QuadTreeLib
 			// this recurses into the node that is just large enough to fit this item
 			foreach (QuadTreeNode node in m_nodes)
 			{
-				if (node.Bounds.Contains(range))
+				if (node.Bounds.Contains(SgRange))
 				{
-					return node.Remove(range);
+					return node.Remove(SgRange);
 				}
 			}
 
 			for (int i = 0; i < Contents.Count; i++ )
 			{
-				if (Contents[i].Equals(range))
+				if (Contents[i].Equals(SgRange))
 				{
 					Contents.RemoveAt(i);
 					return true;
@@ -443,12 +441,12 @@ namespace QuadTreeLib
 		/// Insert an item to this node
 		/// </summary>
 		/// <param name="item"></param>
-		public void Insert(Range item)
+		public void Insert(SgRange item)
 		{
 			// if the item is not contained in this quad, there's a problem
 			if (!m_bounds.Contains(item))
 			{
-				throw new ArgumentException("range is out of the bounds of this quadtree node");
+				throw new ArgumentException("SgRange is out of the bounds of this quadtree node");
 			}
 
 			// if the subnodes are null create them. may not be sucessfull: see below

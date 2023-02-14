@@ -131,7 +131,7 @@ namespace SourceGrid.Selection
 		/// </summary>
 		/// <param name="range"></param>
 		/// <param name="select"></param>
-		void SelectRange(Range range, bool select);
+		void SelectRange(SgRange range, bool select);
 	
 		
 		/// <summary>

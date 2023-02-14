@@ -8,9 +8,9 @@ namespace SourceGrid
 	/// Uses simple iterating over list to find
 	/// required range
 	/// </summary>
-public class SpannedRangesList: List<Range>, ISpannedRangesCollection
+public class SpannedRangesList: List<SgRange>, ISpannedRangesCollection
 	{
-		public void Update(Range oldRange, Range newRange)
+		public void Update(SgRange oldRange, SgRange newRange)
 		{
 			int index = base.IndexOf(oldRange);
 			if (index <0 )
@@ -23,7 +23,7 @@ public class SpannedRangesList: List<Range>, ISpannedRangesCollection
 			// just do nothing, nothing needed
 		}
 		
-		public new void Remove(Range range)
+		public new void Remove(SgRange range)
 		{
 			int index = base.IndexOf(range);
 			if (index < 0)
@@ -36,7 +36,7 @@ public class SpannedRangesList: List<Range>, ISpannedRangesCollection
 		/// Returns first intersecting region
 		/// </summary>
 		/// <param name="pos"></param>
-		public Range? GetFirstIntersectedRange(Position pos)
+		public SgRange? GetFirstIntersectedRange(Position pos)
 		{
 			for (int i = 0; i < this.Count; i++)
 			{
@@ -47,9 +47,9 @@ public class SpannedRangesList: List<Range>, ISpannedRangesCollection
 			return null;
 		}
 		
-		public List<Range> GetRanges(Range range)
+		public List<SgRange> GetRanges(SgRange range)
 		{
-			var result = new List<Range>();
+			var result = new List<SgRange>();
 			for (int i = 0; i < this.Count; i++)
 			{
 				var r = this[i];
@@ -59,7 +59,7 @@ public class SpannedRangesList: List<Range>, ISpannedRangesCollection
 			return result;
 		}
 		
-		public Range? FindRangeWithStart(Position start)
+		public SgRange? FindRangeWithStart(Position start)
 		{
 			for (int i = 0; i < this.Count; i++)
 			{

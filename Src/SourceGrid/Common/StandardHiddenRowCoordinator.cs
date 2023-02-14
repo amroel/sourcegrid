@@ -68,7 +68,7 @@ namespace SourceGrid
 			
 			rows.RowVisibilityChanged += delegate(int rowIndex, bool becameVisible)
 			{
-				var range = new Range(rowIndex, 0, rowIndex, 1);
+				var range = new SgRange(rowIndex, 0, rowIndex, 1);
 				if (becameVisible)
 					m_rowMerger.RemoveRange(range);
 				else

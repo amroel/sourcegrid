@@ -7,7 +7,7 @@ namespace SourceGrid
 	/// A collection of elements of type Range
 	/// </summary>
 	[Serializable]
-	public class RangeCollection : List<Range>
+	public class RangeCollection : List<SgRange>
 	{
 		/// <summary>
 		/// Returns true if the specified cell position is present in any range in the current collection.
@@ -16,7 +16,7 @@ namespace SourceGrid
 		/// <returns></returns>
 		public bool ContainsCell(Position p_Position)
 		{
-			foreach(Range range in this)
+			foreach(SgRange range in this)
 			{
 				if ( range.Contains(p_Position) )
 					return true;

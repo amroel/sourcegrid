@@ -99,7 +99,7 @@ namespace SourceGrid.Cells
         /// <summary>
         /// Gets the range of the cell
         /// </summary>
-        Range Range
+        SgRange Range
         {
             get;
         }

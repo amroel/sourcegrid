@@ -206,7 +206,7 @@ namespace SourceGrid
         /// Auto size the columns and the rows speified
         /// </summary>
         /// <param name="p_RangeToAutoSize"></param>
-        public virtual void AutoSizeCells(Range p_RangeToAutoSize)
+        public virtual void AutoSizeCells(SgRange p_RangeToAutoSize)
         {
             SuspendLayout();
             if (p_RangeToAutoSize.IsEmpty() == false)
@@ -274,7 +274,7 @@ namespace SourceGrid
         /// </summary>
         public virtual void CheckPositions()
         {
-            Range complete = CompleteRange;
+            SgRange complete = CompleteRange;
 
             if (m_MouseCellPosition.IsEmpty() == false &&
                 CompleteRange.Contains(m_MouseCellPosition) == false)
@@ -346,7 +346,7 @@ namespace SourceGrid
 
         #region Range methods
 
-        public Size RangeToSize(Range range)
+        public Size RangeToSize(SgRange range)
         {
             if (range.IsEmpty())
                 return Size.Empty;
@@ -367,7 +367,7 @@ namespace SourceGrid
         /// Returns the relative rectangle to the current scrollable area of the specified Range.
         /// Returns a Rectangle.Empty if the Range is not valid.
         /// </summary>
-        public Rectangle RangeToRectangle(Range range)
+        public Rectangle RangeToRectangle(SgRange range)
         {
             if (range.IsEmpty())
                 return Rectangle.Empty;
@@ -393,7 +393,7 @@ namespace SourceGrid
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        internal Rectangle RangeToVisibleRectangle(Range range)
+        internal Rectangle RangeToVisibleRectangle(SgRange range)
         {
            return m_ScrollingStyle.RangeToVisibleRectangle(range);
         }
@@ -450,15 +450,15 @@ namespace SourceGrid
         /// Returns a single Range for the specified grid area (scrollable, fixedtop, fixedleft, fixedtopleft).
         /// Returns Range.Empty if there isn't a valid range in the specified area.
         /// </summary>
-        public Range RangeAtArea(CellPositionType areaType)
+        public SgRange RangeAtArea(CellPositionType areaType)
         {
             if (areaType == CellPositionType.FixedTopLeft)
             {
                 if (ActualFixedRows > 0 && Rows.Count >= ActualFixedRows &&
                     ActualFixedColumns > 0 && Columns.Count >= ActualFixedColumns)
-                    return new Range(0, 0, ActualFixedRows - 1, ActualFixedColumns - 1);
+                    return new SgRange(0, 0, ActualFixedRows - 1, ActualFixedColumns - 1);
                 else
-                    return Range.Empty;
+                    return SgRange.Empty;
             }
             
             if (areaType == CellPositionType.FixedLeft)
@@ -485,7 +485,7 @@ namespace SourceGrid
                 int firstCol = HeaderColumnCount;
                 int lastCol = Columns.Count - 1;
 
-                return new Range(firstRow, firstCol,
+                return new SgRange(firstRow, firstCol,
                                  lastRow, lastCol);
             }
             else
@@ -518,9 +518,9 @@ namespace SourceGrid
         /// Get the visible ranges. Returns a list of Range, one for each area.
         /// </summary>
         /// <returns></returns>
-        internal IEnumerable<Range> GetVisibleRegion()
+        internal IEnumerable<SgRange> GetVisibleRegion()
         {
-            Range rng;
+            SgRange rng;
 
             rng = RangeAtArea(CellPositionType.FixedTopLeft);
             if (rng.IsEmpty() == false)
@@ -892,14 +892,14 @@ namespace SourceGrid
         /// <param name="position"></param>
         public virtual void InvalidateCell(Position position)
         {
-            InvalidateRange(new Range(position));
+            InvalidateRange(new SgRange(position));
         }
 
         /// <summary>
         /// Force a range of cells to redraw.
         /// </summary>
         /// <param name="range"></param>
-        public void InvalidateRange(Range range)
+        public void InvalidateRange(SgRange range)
         {
             if (range.IsEmpty())
                 return;
@@ -914,10 +914,10 @@ namespace SourceGrid
             // cliping against given range
             foreach (CellPositionType type in types)
             {
-                Range visibleRange = RangeAtArea(type);
+                SgRange visibleRange = RangeAtArea(type);
                 // clip our range with visible range
                 // so that we wount loop through thousands of rows
-                Range clippedRange = Range.Intersect(range, visibleRange);
+                SgRange clippedRange = SgRange.Intersect(range, visibleRange);
                 if (clippedRange.IsEmpty() == false)
                 {
                     Rectangle gridRectangle = RangeToRectangle(clippedRange);
@@ -933,16 +933,16 @@ namespace SourceGrid
         /// </summary>
         /// <param name="areaType"></param>
         /// <returns></returns>
-        public Range RangeAtAreaExpanded(CellPositionType areaType)
+        public SgRange RangeAtAreaExpanded(CellPositionType areaType)
         {
-            Range range = RangeAtArea(areaType);
+            SgRange range = RangeAtArea(areaType);
             // decrease visible row by 1, so that selection top row would not be drawn
             // if selection start somewhere outside the screen
             if (range.IsEmpty() == false)
             {
                 int startRow = range.Start.Row > 0 ? range.Start.Row - 1 : 0;
                 int startCol = range.Start.Column > 0 ? range.Start.Column - 1 : 0;
-                range = new Range(
+                range = new SgRange(
                     new Position(startRow, startCol),
                     range.End);
             }
@@ -1044,9 +1044,9 @@ namespace SourceGrid
         /// For example suppose to have at grid[0,0] a cell with ColumnSpan equal to 2. If you call this method with the position 0,0 returns 0,0-0,1 and if you call this method with 0,1 return again 0,0-0,1.
         /// </summary>
         /// <returns></returns>
-        public virtual Range RangeToCellRange(Range range)
+        public virtual SgRange RangeToCellRange(SgRange range)
         {
-            return new Range(range.Start, range.End);
+            return new SgRange(range.Start, range.End);
         }
 
         /// <summary>
@@ -1069,16 +1069,16 @@ namespace SourceGrid
         /// </summary>
         /// <param name="pPosition"></param>
         /// <returns></returns>
-        public virtual Range PositionToCellRange(Position pPosition)
+        public virtual SgRange PositionToCellRange(Position pPosition)
         {
             if (pPosition.IsEmpty())
-                return Range.Empty;
+                return SgRange.Empty;
 
             ICellVirtual l_Cell = this.GetCell(pPosition.Row, pPosition.Column);
             if (l_Cell == null)
-                return Range.Empty;
+                return SgRange.Empty;
             else
-                return new Range(pPosition);
+                return new SgRange(pPosition);
             //return new Range(pPosition);
         }
         #endregion
@@ -1244,16 +1244,16 @@ namespace SourceGrid
         /// <param name="e"></param>
         protected virtual void OnMouseSelectionFinish(RangeEventArgs e)
         {
-            m_OldMouseSelectionRange = Range.Empty;
+            m_OldMouseSelectionRange = SgRange.Empty;
         }
 
-        private Range m_OldMouseSelectionRange = Range.Empty;
-        private Range m_MouseSelectionRange = Range.Empty;
+        private SgRange m_OldMouseSelectionRange = SgRange.Empty;
+        private SgRange m_MouseSelectionRange = SgRange.Empty;
         /// <summary>
         /// Returns the cells that are selected with the mouse. Range.Empty if no cells are selected. Consider that this method returns valid cells only during the mouse down operations, when release the mouse the cells are selected and you can read them using Grid.Selection object.
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public virtual Range MouseSelectionRange
+        public virtual SgRange MouseSelectionRange
         {
             get { return m_MouseSelectionRange; }
         }
@@ -1282,7 +1282,7 @@ namespace SourceGrid
         /// <param name="e"></param>
         protected virtual void OnMouseSelectionChange(EventArgs e)
         {
-            Range l_MouseRange = MouseSelectionRange;
+            SgRange l_MouseRange = MouseSelectionRange;
 
             OnUndoMouseSelection(new RangeEventArgs(m_OldMouseSelectionRange));
 
@@ -1296,10 +1296,10 @@ namespace SourceGrid
         /// </summary>
         public void MouseSelectionFinish()
         {
-            if (m_MouseSelectionRange != Range.Empty)
+            if (m_MouseSelectionRange != SgRange.Empty)
                 OnMouseSelectionFinish(new RangeEventArgs(m_OldMouseSelectionRange));
 
-            m_MouseSelectionRange = Range.Empty;
+            m_MouseSelectionRange = SgRange.Empty;
         }
 
         /// <summary>
@@ -1308,7 +1308,7 @@ namespace SourceGrid
         /// <param name="p_Corner"></param>
         public virtual void ChangeMouseSelectionCorner(Position p_Corner)
         {
-            Range newMouseSelection = new Range(Selection.ActivePosition, p_Corner);
+            SgRange newMouseSelection = new SgRange(Selection.ActivePosition, p_Corner);
 
             bool l_bChange = false;
             if (m_MouseSelectionRange != newMouseSelection)
@@ -1587,7 +1587,7 @@ namespace SourceGrid
                     Selection.ResetSelection(true);
                 }
                 //chinnari.prasad@siemens.com : Sending the correct range
-                Selection.SelectRange(new Range(m_firstCellShiftSelected, Selection.ActivePosition), true);
+                Selection.SelectRange(new SgRange(m_firstCellShiftSelected, Selection.ActivePosition), true);
             }
 
             #endregion
@@ -1678,7 +1678,7 @@ namespace SourceGrid
             bool cutEnabled = (ClipboardMode & ClipboardMode.Cut) == ClipboardMode.Cut;
             if (cutEnabled == false || selRegion.IsEmpty() == true)
                 return;
-            Range rng = selRegion[0];
+            SgRange rng = selRegion[0];
 
             RangeData data = RangeData.LoadData(this, rng, CutMode.CutImmediately);
             RangeData.ClipboardSetData(data);
@@ -1698,9 +1698,9 @@ namespace SourceGrid
 
             if (rngData == null)
                 return;
-            Range rng = selRegion[0];
-            Range data = rngData.SourceRange;
-            Range destinationRange = new Range(
+            SgRange rng = selRegion[0];
+            SgRange data = rngData.SourceRange;
+            SgRange destinationRange = new SgRange(
                 new Position(rng.Start.Row, rng.Start.Column),
                 new Position(rng.Start.Row + (data.End.Row - data.Start.Row),
                              rng.Start.Column + (data.End.Column - data.Start.Column)));
@@ -1720,7 +1720,7 @@ namespace SourceGrid
             bool copyEnabled = (ClipboardMode & ClipboardMode.Copy) == ClipboardMode.Copy;
             if (copyEnabled == false || selRegion.IsEmpty() == true)
                 return;
-            Range rng = selRegion[0];
+            SgRange rng = selRegion[0];
 
             RangeData data = RangeData.LoadData(this, rng, CutMode.None);
             RangeData.ClipboardSetData(data);
@@ -2300,7 +2300,7 @@ namespace SourceGrid
                 // and fall outside the scrollable area
                 if ((linked.Position.Row >= FixedRows) && (linked.Position.Column >= FixedColumns))
                 {
-                    Range scrollableRange = RangeAtArea(CellPositionType.Scrollable);
+                    SgRange scrollableRange = RangeAtArea(CellPositionType.Scrollable);
                     Rectangle scrollableRectangle = RangeToRectangle(scrollableRange);
 
                     control.Visible = !Rectangle.Intersect(rect, scrollableRectangle).IsEmpty;
@@ -2403,7 +2403,7 @@ namespace SourceGrid
                                   bool p_bAsc,
                                   IComparer p_CellComparer)
         {
-            Range l_Range = p_RangeToSort.GetRange(this);
+            SgRange l_Range = p_RangeToSort.GetRange(this);
             SortRangeRows(l_Range, keyColumn, p_bAsc, p_CellComparer);
         }
 
@@ -2414,7 +2414,7 @@ namespace SourceGrid
         /// <param name="keyColumn">Index of the column relative to the grid to use as sort keys, must be between start and end col</param>
         /// <param name="p_bAscending">Ascending true, Descending false</param>
         /// <param name="p_CellComparer">CellComparer, if null the default ValueCellComparer comparer will be used</param>
-        public void SortRangeRows(Range p_Range,
+        public void SortRangeRows(SgRange p_Range,
                                   int keyColumn,
                                   bool p_bAscending,
                                   IComparer p_CellComparer)
@@ -2730,14 +2730,14 @@ namespace SourceGrid
         /// Returns a Range that represents the complete cells of the grid
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Range CompleteRange
+        public SgRange CompleteRange
         {
             get
             {
                 if (Rows.Count > 0 && Columns.Count > 0)
-                    return new Range(0, 0, Rows.Count - 1, Columns.Count - 1);
+                    return new SgRange(0, 0, Rows.Count - 1, Columns.Count - 1);
                 else
-                    return Range.Empty;
+                    return SgRange.Empty;
             }
         }
         #endregion
@@ -2927,7 +2927,7 @@ namespace SourceGrid
             int NewProposedTopRow = 0;
             int NewProposedFocusedRow = 0;
 
-            Range rngFocusedCell = PositionToCellRange(Selection.ActivePosition);
+            SgRange rngFocusedCell = PositionToCellRange(Selection.ActivePosition);
 
             //if there is no selection here (ActiveRow is undefined),
             //put selection in the first possible cell

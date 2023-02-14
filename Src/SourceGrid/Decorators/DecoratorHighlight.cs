@@ -6,18 +6,18 @@ namespace SourceGrid.Decorators
 {
     public class DecoratorHighlight : DecoratorBase
     {
-        private Range mRange = Range.Empty;
+        private SgRange mRange = SgRange.Empty;
         /// <summary>
         /// Gets or sets the range to draw
         /// </summary>
-        public Range Range
+        public SgRange Range
         {
             get { return mRange; }
             set { mRange = value; }
         }
 
 
-        public override bool IntersectWith(Range range)
+        public override bool IntersectWith(SgRange range)
         {
             return Range.IntersectsWith(range);
         }

@@ -17,7 +17,7 @@ namespace SourceGrid
 						base.m_totalHiddenRows -= 1;
 				}
 				
-				var range = new Range(e.StartIndex, 0, e.StartIndex + e.Count, 1);
+				var range = new SgRange(e.StartIndex, 0, e.StartIndex + e.Count, 1);
 				base.m_rowMerger.RemoveRange(range);
 			};
 			

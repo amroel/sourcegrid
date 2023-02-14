@@ -19,13 +19,13 @@ namespace SourceGrid
 		/// </summary>
 		int Count {get;}
 		
-		void Add(Range range);
+		void Add(SgRange range);
 		
 		/// <summary>
 		/// Searches for an old range. If finds, updates 
 		/// found region. Else throws RangeNotFoundException
 		/// </summary>
-		void Update(Range oldRange, Range newRange);
+		void Update(SgRange oldRange, SgRange newRange);
 		
 		/// <summary>
 		/// Increase size up to specified values.
@@ -38,11 +38,11 @@ namespace SourceGrid
 		/// <summary>
 		/// If does not find, throws RangeNotFoundException
 		/// </summary>
-		void Remove(Range range);
+		void Remove(SgRange range);
 		
-		Range? GetFirstIntersectedRange(Position pos);
+		SgRange? GetFirstIntersectedRange(Position pos);
 		
-		List<Range> GetRanges(Range range);
+		List<SgRange> GetRanges(SgRange range);
 		
 		/// <summary>
 		/// Returns range which has exactly the same start position
@@ -50,8 +50,8 @@ namespace SourceGrid
 		/// </summary>
 		/// <param name="start"></param>
 		/// <returns></returns>
-		Range? FindRangeWithStart(Position start);
+		SgRange? FindRangeWithStart(Position start);
 		
-		Range[] ToArray();
+		SgRange[] ToArray();
 	}
 }

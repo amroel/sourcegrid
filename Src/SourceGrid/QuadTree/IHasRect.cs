@@ -1,6 +1,4 @@
 ﻿using SourceGrid;
-using System;
-using System.Drawing;
 
 namespace QuadTreeLib
 {
@@ -9,6 +7,6 @@ namespace QuadTreeLib
     /// </summary>
     public interface IHasRect
     {
-        Range Rectangle { get; }
+        SgRange Rectangle { get; }
     }
 }

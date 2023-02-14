@@ -5,9 +5,9 @@ using System.Reflection;
 
 namespace SourceGrid.Selection
 {
-	public class RangeComparerByRows : IComparer<Range>
+	public class RangeComparerByRows : IComparer<SgRange>
 	{
-		public int Compare(Range x, Range y)
+		public int Compare(SgRange x, SgRange y)
 		{
 			if (x.Start.Row == y.Start.Row)
 				return 0;

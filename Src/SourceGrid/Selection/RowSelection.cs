@@ -45,7 +45,7 @@ namespace SourceGrid.Selection
 
 		public override void SelectRow(int row, bool select)
 		{
-			Range rowRange = Grid.Rows.GetRange(row);
+			SgRange rowRange = Grid.Rows.GetRange(row);
 			if (select && mList.IsSelectedRow(row) == false)
 			{
 				// if multi selection is false, remove all previously selected rows
@@ -55,12 +55,12 @@ namespace SourceGrid.Selection
 				// continue with adding selection
 				mList.AddRange(rowRange);
 				this.ActivePosition = activePosition;
-				OnSelectionChanged(new RangeRegionChangedEventArgs(rowRange, Range.Empty));
+				OnSelectionChanged(new RangeRegionChangedEventArgs(rowRange, SgRange.Empty));
 			} else
 				if (!select && mList.IsSelectedRow(row))
 			{
 				mList.RemoveRange(rowRange);
-				OnSelectionChanged(new RangeRegionChangedEventArgs(Range.Empty, rowRange));
+				OnSelectionChanged(new RangeRegionChangedEventArgs(SgRange.Empty, rowRange));
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace SourceGrid.Selection
 			SelectRow(position.Row, select);
 		}
 
-		public override bool IsSelectedRange(Range range)
+		public override bool IsSelectedRange(SgRange range)
 		{
 			for (int r = range.Start.Row; r <= range.End.Row; r++)
 			{
@@ -85,18 +85,18 @@ namespace SourceGrid.Selection
 			return true;
 		}
 
-		private Range NormalizeRange(Range range)
+		private SgRange NormalizeRange(SgRange range)
 		{
-			return new Range(range.Start.Row, 0, range.End.Row, Grid.Columns.Count - 1);
+			return new SgRange(range.Start.Row, 0, range.End.Row, Grid.Columns.Count - 1);
 		}
 		
-		public override void SelectRange(Range range, bool select)
+		public override void SelectRange(SgRange range, bool select)
 		{
-			Range normalizedRange = NormalizeRange(range);
+			SgRange normalizedRange = NormalizeRange(range);
 			if (select)
 				mList.AddRange(normalizedRange); else
 				mList.RemoveRange(normalizedRange);
-			OnSelectionChanged(new RangeRegionChangedEventArgs(normalizedRange, Range.Empty));
+			OnSelectionChanged(new RangeRegionChangedEventArgs(normalizedRange, SgRange.Empty));
 		}
 
 		protected override void OnResetSelection()
@@ -119,14 +119,14 @@ namespace SourceGrid.Selection
 
 			if (Grid.Columns.Count == 0)
 				return region;
-			foreach (Range selectedRange in mList.GetSelectedRowRegions(0, Grid.Columns.Count))
+			foreach (SgRange selectedRange in mList.GetSelectedRowRegions(0, Grid.Columns.Count))
 			{
 				region.Add(ValidateRange(selectedRange));
 			}
 			return region;
 		}
 
-		public override bool IntersectsWith(Range rng)
+		public override bool IntersectsWith(SgRange rng)
 		{
 			for (int r = rng.Start.Row; r <= rng.End.Row; r++)
 			{

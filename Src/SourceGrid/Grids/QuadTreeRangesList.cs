@@ -28,18 +28,18 @@ namespace SourceGrid
 	/// </summary>
 	public class QuadTreeRangesList : QuadTree, ISpannedRangesCollection
 	{
-		public QuadTreeRangesList(Range bounds) : base(bounds)
+		public QuadTreeRangesList(SgRange bounds) : base(bounds)
 		{
 			
 		}
 		
-		public Range[] ToArray()
+		public SgRange[] ToArray()
 		{
 			return base.Contents.ToArray();
 		}
 		
 		
-		public new void Remove(Range range)
+		public new void Remove(SgRange range)
 		{
 			base.Remove(range);
 		}
@@ -56,7 +56,7 @@ namespace SourceGrid
 			}
 		}
 		
-		public void Update(Range oldRange, Range newRange)
+		public void Update(SgRange oldRange, SgRange newRange)
 		{
 			var range = base.QueryFirst(oldRange.Start);
 			if (range == null)
@@ -65,18 +65,18 @@ namespace SourceGrid
 			Insert(newRange);
 		}
 		
-		public void Add(Range range)
+		public void Add(SgRange range)
 		{
 			base.Insert(range);
 		}
 		
-		public System.Collections.Generic.List<Range> GetRanges(Range range)
+		public System.Collections.Generic.List<SgRange> GetRanges(SgRange range)
 		{
 			return base.Query(range);
 		}
 		
 		
-		public Range? GetFirstIntersectedRange(Position pos)
+		public SgRange? GetFirstIntersectedRange(Position pos)
 		{
 			var result = base.QueryFirst(pos);
 			if (result == null)
@@ -84,7 +84,7 @@ namespace SourceGrid
 			return result;
 		}
 		
-		public Range? FindRangeWithStart(Position start)
+		public SgRange? FindRangeWithStart(Position start)
 		{
 			var result = base.QueryFirst(start);
 			return result;

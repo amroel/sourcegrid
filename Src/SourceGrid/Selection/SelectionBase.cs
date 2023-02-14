@@ -721,7 +721,7 @@ namespace SourceGrid.Selection
 		/// </summary>
 		public virtual void Invalidate()
 		{
-			foreach (Range rng in GetSelectionRegion())
+			foreach (SgRange rng in GetSelectionRegion())
 				Grid.InvalidateRange(rng);
 		}
 		#endregion
@@ -801,13 +801,13 @@ namespace SourceGrid.Selection
 		/// <summary>
 		/// Check if the range is selected.
 		/// </summary>
-		public abstract bool IsSelectedRange(Range range);
+		public abstract bool IsSelectedRange(SgRange range);
 		/// <summary>
 		/// Select or unselect the specified range
 		/// </summary>
 		/// <param name="range"></param>
 		/// <param name="select"></param>
-		public abstract void SelectRange(Range range, bool select);
+		public abstract void SelectRange(SgRange range, bool select);
 
 		/// <summary>
 		/// Reset the selection
@@ -847,14 +847,14 @@ namespace SourceGrid.Selection
 		/// </summary>
 		/// <param name="rng"></param>
 		/// <returns></returns>
-		public abstract bool IntersectsWith(Range rng);
+		public abstract bool IntersectsWith(SgRange rng);
 
 		/// <summary>
 		/// Check if the range can be selected
 		/// </summary>
 		/// <param name="rng"></param>
 		/// <returns></returns>
-		protected Range ValidateRange(Range rng)
+		protected SgRange ValidateRange(SgRange rng)
 		{
 			//Position start = rng.Start;
 			//Position end = rng.End;
@@ -892,13 +892,13 @@ namespace SourceGrid.Selection
 
 			if (e.AddedRange != null)
 			{
-				foreach (Range r in e.AddedRange)
+				foreach (SgRange r in e.AddedRange)
 					Grid.InvalidateRange(r);
 			}
 
 			if (e.RemovedRange != null)
 			{
-				foreach (Range r in e.RemovedRange)
+				foreach (SgRange r in e.RemovedRange)
 					Grid.InvalidateRange(r);
 			}
 		}

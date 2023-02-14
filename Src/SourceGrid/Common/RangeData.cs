@@ -81,7 +81,7 @@ namespace SourceGrid
 
 		[Obsolete]
 		private Position mStartDragPosition;
-		private Range mSourceRange;
+		private SgRange mSourceRange;
 		private object[,] mSourceValues;
 		[NonSerialized]
 		private GridVirtual mSourceGrid;
@@ -94,7 +94,7 @@ namespace SourceGrid
 		/// <summary>
 		/// Range source
 		/// </summary>
-		public Range SourceRange
+		public SgRange SourceRange
 		{
 			get{return mSourceRange;}
 		}
@@ -136,7 +136,7 @@ namespace SourceGrid
 		#region Loading data
 		
 		[Obsolete("Use LoadData method without startDragPosition")]
-		public void LoadData(GridVirtual sourceGrid, Range sourceRange, Position startDragPosition, CutMode cutMode)
+		public void LoadData(GridVirtual sourceGrid, SgRange sourceRange, Position startDragPosition, CutMode cutMode)
 		{
 			LoadData(sourceGrid, sourceRange, Position.Empty, cutMode);
 		}
@@ -147,7 +147,7 @@ namespace SourceGrid
 		/// <param name="sourceGrid"></param>
 		/// <param name="sourceRange"></param>
 		/// <param name="cutMode">Cut mode. Can be used to remove the data from the source when pasting it to the destination or immediately.</param>
-		public static RangeData LoadData(GridVirtual sourceGrid, Range sourceRange, CutMode cutMode)
+		public static RangeData LoadData(GridVirtual sourceGrid, SgRange sourceRange, CutMode cutMode)
 		{
 			RangeData data = new RangeData(sourceGrid);
 			//mCutMode = cutMode;
@@ -207,7 +207,7 @@ namespace SourceGrid
 			return data;
 		}
 		
-		private static int GetVisibleColumnCount(GridVirtual sourceGrid, Range sourceRange)
+		private static int GetVisibleColumnCount(GridVirtual sourceGrid, SgRange sourceRange)
 		{
 			int visibleCount = 0;
 			for (int c = sourceRange.Start.Column; c <= sourceRange.End.Column; c++)
@@ -299,7 +299,7 @@ namespace SourceGrid
 		/// <param name="data"></param>
 		/// <param name="range"></param>
 		/// <param name="values"></param>
-		protected virtual void StringToData(string data, out Range range, out object[,] values)
+		protected virtual void StringToData(string data, out SgRange range, out object[,] values)
 		{
 			//tolgo uno dei due caratteri di a capo per usare lo split
 			data = data.Replace("\x0D\x0A","\x0A");
@@ -314,7 +314,7 @@ namespace SourceGrid
 
 			if (rows == 0)
 			{
-				range = Range.Empty;
+				range = SgRange.Empty;
 				values = new string[0,0];
 				return;
 			}
@@ -323,7 +323,7 @@ namespace SourceGrid
 			string[] firstColumnsData = rowsData[0].Split('\t');
 			int cols = firstColumnsData.Length;
 
-			range = new Range(0, 0, rows - 1, cols - 1);
+			range = new SgRange(0, 0, rows - 1, cols - 1);
 			values = new string[rows, cols];
 
 			int arrayRow = 0;
@@ -377,7 +377,7 @@ namespace SourceGrid
 		/// Convert a range and an array of string into a string. Normally using a tab delimited for columns and a LineFeed for rows.
 		/// </summary>
 		/// <returns></returns>
-        protected static string[,] DataToStringArray(GridVirtual sourceGrid, Range range)
+        protected static string[,] DataToStringArray(GridVirtual sourceGrid, SgRange range)
 		{
             int numberOfRows = range.End.Row - range.Start.Row + 1;
             int numberOfCols = range.End.Column - range.Start.Column + 1;
@@ -412,17 +412,17 @@ namespace SourceGrid
 		/// <param name="dropDestination"></param>
 		/// <returns></returns>
 		[Obsolete("Completely not used. Will be removed in future versions")]
-		public Range FindDestinationRange(GridVirtual destinationGrid, Position dropDestination)
+		public SgRange FindDestinationRange(GridVirtual destinationGrid, Position dropDestination)
 		{
 			if (dropDestination.IsEmpty())
-				return Range.Empty;
+				return SgRange.Empty;
 
 			Position destinationStart = new Position(dropDestination.Row + (mSourceRange.Start.Row - mStartDragPosition.Row),
 			                                         dropDestination.Column + (mSourceRange.Start.Column - mStartDragPosition.Column) );
 
 			destinationStart = Position.Max(destinationStart, new Position(0, 0));
 
-			Range destination = mSourceRange;
+			SgRange destination = mSourceRange;
 			destination.MoveTo( destinationStart );
 
 			destination = destination.Intersect(destinationGrid.CompleteRange);

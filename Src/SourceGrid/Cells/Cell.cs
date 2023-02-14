@@ -150,16 +150,16 @@ namespace SourceGrid.Cells
 		/// <summary>
 		/// Gets the range of the cell
 		/// </summary>
-		public Range Range
+		public SgRange Range
 		{
 			get
 			{
 				if (Grid == null)
-					return Range.Empty;
+					return SgRange.Empty;
 
 				int col = Column.Index;
 				int row = Row.Index;
-				return new Range(row, col,
+				return new SgRange(row, col,
 				                 row + RowSpan - 1, col + ColumnSpan - 1);
 			}
 		}

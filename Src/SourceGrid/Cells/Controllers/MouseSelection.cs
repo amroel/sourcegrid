@@ -110,7 +110,7 @@ namespace SourceGrid.Cells.Controllers
             
             //Sandhra.prakash@siemens.com: To Fix autoscrolling issue on pressing shift and then moving mouse
             //after releasing shift
-            Range rg = new Range(sender.Position);
+            SgRange rg = new SgRange(sender.Position);
             bool inRange = false;
             if (grid.Selection.GetSelectionRegion() != null && grid.Selection.GetSelectionRegion().GetCellsPositions().Count > 1)
             {
@@ -168,7 +168,7 @@ namespace SourceGrid.Cells.Controllers
             {
                 //sandhra.prakash@siemens.com: on pressing ctrl and then using shift it resets the selection - to avod this
                 //grid.Selection.ResetSelection(true);
-                Range rangeToSelect = new Range(grid.Selection.ActivePosition, sender.Position);
+                SgRange rangeToSelect = new SgRange(grid.Selection.ActivePosition, sender.Position);
                 grid.Selection.SelectRange(rangeToSelect, true);
             }
 
@@ -199,7 +199,7 @@ namespace SourceGrid.Cells.Controllers
             //after releasing shift
             GridVirtual grid = sender.Grid;
 
-            Range rg = new Range(sender.Position);
+            SgRange rg = new SgRange(sender.Position);
             bool inRange = false;
             if (grid.Selection.GetSelectionRegion() != null && grid.Selection.GetSelectionRegion().GetCellsPositions().Count > 1)
             {

@@ -81,7 +81,7 @@ namespace SourceGrid
                 if (m_FirstVisibleScrollableRow <= -1 || m_FirstVisibleScrollableRow >= m_Grid.Rows.Count
                     || m_FirstVisibleScrollableRowTop < (m_Grid.GetFixedAreaHeight() - m_Grid.VScrollBar.Value))
                 {
-                    Range range = GetScrollableRange();
+                    SgRange range = GetScrollableRange();
                     m_FirstVisibleScrollableRow = FindFirstVisibleRowFromRange(range, out m_FirstVisibleScrollableRowTop);
                 }
                 
@@ -133,7 +133,7 @@ namespace SourceGrid
                 if (m_FirstVisibleScrollableColumn <= -1 || m_FirstVisibleScrollableColumn >= m_Grid.Columns.Count 
                     || m_FirstVisibleScrollableColumnLeft < (m_Grid.GetFixedAreaWidth() - m_Grid.HScrollBar.Value))
                 {
-                    Range range = GetScrollableRange();
+                    SgRange range = GetScrollableRange();
                     m_FirstVisibleScrollableColumn = FindFirstVisibleColumnFromRange(range, out m_FirstVisibleScrollableColumnLeft);
                 }
 
@@ -188,13 +188,13 @@ namespace SourceGrid
         }
 
 
-        public Range GetScrollableRange()
+        public SgRange GetScrollableRange()
         {
             if (m_Grid.Rows.Count <= 0 || m_Grid.Columns.Count <= 0 ||
                 m_Grid.ActualFixedRows >= m_Grid.Rows.Count || m_Grid.ActualFixedColumns >= m_Grid.Columns.Count)
-                return Range.Empty;
+                return SgRange.Empty;
 
-            Range range = new Range(m_Grid.ActualFixedRows, m_Grid.ActualFixedColumns,
+            SgRange range = new SgRange(m_Grid.ActualFixedRows, m_Grid.ActualFixedColumns,
                 m_Grid.Rows.Count - 1, m_Grid.Columns.Count - 1);
             return range;
         }
@@ -253,30 +253,30 @@ namespace SourceGrid
                 m_Grid.HScrollBar.Value = Math.Min(m_Grid.HScrollBar.Value + m_Grid.HScrollBar.SmallChange, m_Grid.HScrollBar.Maximum);
         }
 
-        public Range GetFixedTopRange()
+        public SgRange GetFixedTopRange()
         {
-            Range fixedTop = Range.Empty;
+            SgRange fixedTop = SgRange.Empty;
 
             int actualFixedColumns = m_Grid.ActualFixedColumns;
             int actualFixedRows = m_Grid.ActualFixedRows;
 
             if (actualFixedRows > 0 && actualFixedColumns >= 0 && m_Grid.Columns.Count > 0 && 
                 m_Grid.ActualFixedRows <= m_Grid.Rows.Count && m_Grid.ActualFixedColumns < m_Grid.Columns.Count)
-                fixedTop = new Range(0, actualFixedColumns, actualFixedRows - 1, m_Grid.Columns.Count - 1);
+                fixedTop = new SgRange(0, actualFixedColumns, actualFixedRows - 1, m_Grid.Columns.Count - 1);
 
             return fixedTop;
         }
 
-        public Range GetFixedLeftRange()
+        public SgRange GetFixedLeftRange()
         {
-            Range fixedLeft = Range.Empty;
+            SgRange fixedLeft = SgRange.Empty;
 
             int actualFixedColumns = m_Grid.ActualFixedColumns;
             int actualFixedRows = m_Grid.ActualFixedRows;
 
             if (actualFixedColumns > 0 && actualFixedRows >= 0 && m_Grid.Rows.Count > 0 &&
                 m_Grid.ActualFixedRows < m_Grid.Rows.Count && m_Grid.ActualFixedColumns <= m_Grid.Columns.Count)
-                fixedLeft = new Range(actualFixedRows, 0, m_Grid.Rows.Count - 1, actualFixedColumns - 1);
+                fixedLeft = new SgRange(actualFixedRows, 0, m_Grid.Rows.Count - 1, actualFixedColumns - 1);
             return fixedLeft;
         }
 
@@ -423,7 +423,7 @@ namespace SourceGrid
             DrawScrollableArea(e, scrollableArea);
         }
 
-        public void PaintMergedCell(GraphicsCache graphics, Range cellRange, CellContext cellContext)
+        public void PaintMergedCell(GraphicsCache graphics, SgRange cellRange, CellContext cellContext)
         {
             Grid grid = m_Grid as Grid;
             if (grid == null)
@@ -719,7 +719,7 @@ namespace SourceGrid
             return row < m_Grid.ActualFixedRows ? top : top - m_Grid.CustomScrollPosition.Y;
         }
 
-        public Rectangle RangeToVisibleRectangle(Range range)
+        public Rectangle RangeToVisibleRectangle(SgRange range)
         {
             if (range.IsEmpty())
                 return Rectangle.Empty;
@@ -789,7 +789,7 @@ namespace SourceGrid
             return new Rectangle(new Point(x, y), size);
         }
 
-        public BorderPartType GetBorderType(Range rng)
+        public BorderPartType GetBorderType(SgRange rng)
         {
             BorderPartType partType = BorderPartType.All;
 
@@ -955,7 +955,7 @@ namespace SourceGrid
             Rectangle clipRectangle = new Rectangle(0, scrollableArea.Y,
                     scrollableArea.X, m_Grid.DisplayRectangle.Height - scrollableArea.Y);
             
-            Range fixedLeft = m_Grid.RangeAtArea(CellPositionType.FixedLeft);
+            SgRange fixedLeft = m_Grid.RangeAtArea(CellPositionType.FixedLeft);
 
             if (fixedLeft.IsEmpty())
             {
@@ -973,7 +973,7 @@ namespace SourceGrid
 
             int lastColumn = m_Grid.ActualFixedColumns - 1;
 
-            fixedLeft = new Range(m_FirstVisibleScrollableRow, firstCol, lastrow, lastColumn);
+            fixedLeft = new SgRange(m_FirstVisibleScrollableRow, firstCol, lastrow, lastColumn);
 
             if (fixedLeft.IsEmpty())
             {
@@ -1003,7 +1003,7 @@ namespace SourceGrid
             Rectangle clipRectangle = new Rectangle(scrollableArea.X, 0,
                     m_Grid.DisplayRectangle.Width - scrollableArea.X, scrollableArea.Y);
 
-            Range fixedTop = m_Grid.RangeAtArea(CellPositionType.FixedTop);
+            SgRange fixedTop = m_Grid.RangeAtArea(CellPositionType.FixedTop);
 
             if (fixedTop.IsEmpty())
             {
@@ -1022,7 +1022,7 @@ namespace SourceGrid
 
             int lastColumn = FindLastVisibleColumn(m_FirstVisibleScrollableColumn, clipRectangle.Right);
 
-            fixedTop = new Range(firstRow, m_FirstVisibleScrollableColumn, lastrow, lastColumn);
+            fixedTop = new SgRange(firstRow, m_FirstVisibleScrollableColumn, lastrow, lastColumn);
 
             if (fixedTop.IsEmpty())
             {
@@ -1048,7 +1048,7 @@ namespace SourceGrid
 
         private void DrawFixedTopLeft(PaintEventArgs e)
         {
-            Range fixedTopLeft = m_Grid.RangeAtArea(CellPositionType.FixedTopLeft);
+            SgRange fixedTopLeft = m_Grid.RangeAtArea(CellPositionType.FixedTopLeft);
 
             if (!fixedTopLeft.IsEmpty())
             {
@@ -1067,7 +1067,7 @@ namespace SourceGrid
             Rectangle clipRectangle = new Rectangle(scrollableArea.X, scrollableArea.Y,
                 m_Grid.DisplayRectangle.Width - scrollableArea.X, m_Grid.DisplayRectangle.Height - scrollableArea.Y);
 
-            Range range = GetScrollableRange();
+            SgRange range = GetScrollableRange();
 
             if(range.IsEmpty())
                 return;
@@ -1081,7 +1081,7 @@ namespace SourceGrid
 
             int lastColumn = FindLastVisibleColumn(m_FirstVisibleScrollableColumn, clipRectangle.Right);
 
-            range = new Range(m_FirstVisibleScrollableRow, m_FirstVisibleScrollableColumn, lastrow, lastColumn);
+            range = new SgRange(m_FirstVisibleScrollableRow, m_FirstVisibleScrollableColumn, lastrow, lastColumn);
 
             if (range.IsEmpty()) 
                 return;
@@ -1164,7 +1164,7 @@ namespace SourceGrid
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        private int FindFirstVisibleRowFromRange(Range range)
+        private int FindFirstVisibleRowFromRange(SgRange range)
         {
             int top;
             return FindFirstVisibleRowFromRange(range, out top);
@@ -1177,7 +1177,7 @@ namespace SourceGrid
         ///  <param name="range"></param>
         /// <param name="top"></param>
         /// <returns></returns>
-        private int FindFirstVisibleRowFromRange(Range range, out int top)
+        private int FindFirstVisibleRowFromRange(SgRange range, out int top)
         {
 
             top = GetTop(0, 0, range.Start.Row);
@@ -1207,7 +1207,7 @@ namespace SourceGrid
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        private int FindFirstVisibleColumnFromRange(Range range)
+        private int FindFirstVisibleColumnFromRange(SgRange range)
         {
             int left;
             return FindFirstVisibleColumnFromRange(range, out left);
@@ -1220,7 +1220,7 @@ namespace SourceGrid
         ///  <param name="range"></param>
         /// <param name="left"></param>
         /// <returns></returns>
-        private int FindFirstVisibleColumnFromRange(Range range, out int left)
+        private int FindFirstVisibleColumnFromRange(SgRange range, out int left)
         {
             left = GetLeft(0, 0, range.Start.Column);
             if (range.Start.Column <= m_Grid.ActualFixedColumns - 1)
